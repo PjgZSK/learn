@@ -2,25 +2,31 @@
 ## 1.create github account
 ## 2.create repository X
 ## 3.add remote rep X to your local dir
-* link remote rep
+* link remote rep :
 
     `
     git remote add replocalname url
     `
 
-* you can use remote command to check these remote rep linked with current workspace
+* you can use remote command to check these remote rep linked with current workspace :
 
     `
     git remote -v
     `
+    
+    or if you want see more info :
+    
+    `
+    git remote show repname
+    `
 ## 4.auto login(https)
-* install github cli
+* install github cli :
 
     `
     brew install gh
     `
 
-* run github cli
+* run github cli :
 
     `
     gh auth login
