@@ -1,4 +1,4 @@
-# :Github/mac
+# :Github Remote/mac
 ## 1.create github account
 ## 2.create repository X
 ## 3.add remote rep X to your local dir
@@ -39,3 +39,11 @@
 `
 git push -f replocalname branch
 `
+
+* quick push and pull
+    
+    `
+    git branch --set-upstream-to=remoterep/branch localbranch
+    `
+
+    and when you run `push` or `pull` command, **localbranchk** will auto link with **remoterep/branch**.
