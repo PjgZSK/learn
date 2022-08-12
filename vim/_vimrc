@@ -67,7 +67,7 @@ func! CompileRunGcc()
 		exec "!g++ % -o %<"
 		exec "!time ./%<"
 	elseif &filetype == 'cpp'
-		exec "!g++ % -std=c++11 -o %< && %<"
+		exec "!g++ % -std=c++11 -o %< && ./%<"
 	elseif &filetype == 'java' 
 		exec "!javac %" 
 		exec "!time java %<"
@@ -153,7 +153,7 @@ autocmd BufNewFile * normal G
 call plug#begin()
 Plug 'ervandew/supertab'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
-Plug 'ycm-core/YouCompleteMe'
+Plug 'ycm-core/YouCompleteMe',{ 'for' : ['c', 'cpp'] }
 call plug#end()
 
 "auto complete
@@ -161,6 +161,8 @@ set completeopt=longest,menu
 
 "python
 set pythonthreedll=python38.dll
+"set pythonthreehome="C:\Program Files\Python38"
+"set pythonhome='C:\Python27'
 
 "clangd
 " Let clangd fully control code completion
