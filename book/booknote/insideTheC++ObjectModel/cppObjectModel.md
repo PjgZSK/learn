@@ -26,9 +26,13 @@
     > **vtbl** contain all virtual function pointers which this class object has and object type info  
     > **vptr** usually in class object first address or last address for efficiency
 ## 3. the c++ object model with inheritance
-* simple inheritance
+* single inheritance
     > **vptr** point correctly guaranteed by *constructor*, *destructor* and *copy* function(of course compiler will add code automatic).  
     > simple inheritance : nonstatic data member will inherited by derived class directly
+
+* multiple inheritance
+    > every base class data member will layout with contiguous memory in derived class.  
+    > when a base pointer point to a derived object, it will point to corresponding base class address in derived object. 
 
 * virtual inheritance
     > the base class inherited with virtual called virtual base class  
@@ -95,7 +99,7 @@
 
 ## 6. problem caused by virtual inheritance
 * ```
-  Point3d origin, &pt = &origin;
+  Point3d origin, *pt = &origin;
   origin.x = .0f;
   pt->x = .0f;
   ```
@@ -108,3 +112,54 @@
     > so access by `pt` will delayed in runtime.  
     > and access by `origin` will not.  
     > and access by `pt` will not in other case.
+
+## 7. named return value(NRV)/return value initialization
+* origin function
+    ```
+    X bar()
+    {
+        X xx;
+        //deal xx ...
+        return xx;
+    }
+    ```
+* compiler transform function
+    ```
+    void bar(X& __result)
+    {
+        X xx;
+        xx.X::X();
+
+        //deal xx ...
+
+        __result.X::X(xx);
+
+        return;
+    }
+    ```
+
+* optimization at user level
+    ```
+    X bar(const T& y, const T& z)
+    {
+        return X(y, z);
+    }
+    ```
+
+* optimization at the compiler level(**NRV**)
+    ```
+    void bar(X& __result)
+    {
+        __result.X::X();
+        
+        //deal __result directly ...
+
+        return;
+    }
+    ```
+    > NRV optimization reduce a call of *copy constructor*
+
+* test code
+    > i cant find a way to tell compiler close NRV optimization, and  
+    > basicly most compiler will open NRV optimization, so i cant get the  
+    > data of NRV optimization.
