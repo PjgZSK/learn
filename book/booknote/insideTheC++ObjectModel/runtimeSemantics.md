@@ -43,13 +43,39 @@
 ## 2. new and delete
 * new
     > there are two steps in `new` operation
-    > 1. allocate memory by system.
+    > 1. allocate memory by system(*operator new* or *operator new[]*).
     > 2. construction
+
+* place new
+    > ```
+    > new (place_address) type
+    > new (place_address) type (initializers)
+    > new (place_address) type [size]
+    > new (place_address) type [size] { braced initializer list }
+    > ```
+    > only construction, not allocate memory.
 
 * delete
     > there are two steps in `delete` operation
     > 1. destruction
-    > 2. free memory by system.
+    > 2. free memory by system(*operator delete* or *operator delete[]*).
+
+* overload
+    > function interface
+    > ```
+    > void* operator new(size_t); 
+    > void* operator new[](size_t); 
+    > void* operator delete(void*) noexcept; 
+    > void* operator delete[](void*) noexcept;
+    > 
+    > void* operator new(size_t, nothrow_t&) noexcept; 
+    > void* operator new[](size_t, nothrow_t&) noexcept;
+    > void* operator delete(void*, nothrow_t&) noexcept; 
+    > void* operator delete[](void*, nothrow_t&) noexcept; 
+    > ```
+    > you can overload one of eight above, but must in global scope  
+    > or class scope. when in class scope, they are implicitly static,  
+    > becase overload new used in 
 
 ## 3. temporary objects
 * conside code below
