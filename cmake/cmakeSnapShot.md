@@ -25,3 +25,10 @@
     > commands ...
     > endforeach()
     > ```
+
+
+## fucking reference
+* learn cmake by read reference is a very very bad choose.
+
+## cmake tutorial 
+* [address](https://cmake.org/cmake/help/latest/guide/tutorial/index.html)
