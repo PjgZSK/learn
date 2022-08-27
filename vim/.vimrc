@@ -49,6 +49,9 @@ if has("win32") || has("win64")
     "set pythonhome='C:\Python27'
 endif
 
+"clipboard
+set clipboard=unnamedplus
+
 "IM
 if has("gui_running")
     set imactivatekey=C-space
@@ -162,6 +165,9 @@ func SetTitle()
 endfunc
 autocmd BufNewFile * normal G
 
+"dict
+" autocmd FileType markdown set dictionary+=~/.vim/dict/md.dict
+
 "vundle
 "set rtp+=~/.vim/bundle/Vundle.vim
 "call vundle#begin()
@@ -220,3 +226,5 @@ set completeopt=longest,menu
 let g:ycm_clangd_uses_ycmd_caching = 0
 " Use installed clangd, not YCM-bundled clangd which doesn't get updates.
 let g:ycm_clangd_binary_path = exepath("clangd")
+
+
