@@ -35,7 +35,7 @@ int main (int argc, char** argv)
     auto etime = std::chrono::steady_clock::now();
     std::cout << "time is : " << 
         (etime.time_since_epoch().count() - stime.time_since_epoch().count()) << " ns\n"
-        << "the square root of " << num 
+        << num 
         << " is " << val 
         << "\n";
     return 0;
