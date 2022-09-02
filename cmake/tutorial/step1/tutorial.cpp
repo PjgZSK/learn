@@ -8,7 +8,13 @@
 #include <cstdlib>
 #include <iostream>
 #include <cmath>
+#include <chrono>
 #include "TutorialConfig.h"
+
+
+#ifdef USE_MYMATH
+    #include "MathFunctions.h"
+#endif
 
 int main (int argc, char** argv)
 {
@@ -20,6 +26,17 @@ int main (int argc, char** argv)
         return 1;
     }
     double num = std::atof(argv[1]);
-    std::cout << "the square root of " << num << " is " << std::sqrt(num) << "\n";
+    auto stime = std::chrono::steady_clock::now();    
+#ifdef USE_MYMATH
+    double val = mysqrt(num); 
+#else
+    double val = std::sqrt(num); 
+#endif
+    auto etime = std::chrono::steady_clock::now();
+    std::cout << "time is : " << 
+        (etime.time_since_epoch().count() - stime.time_since_epoch().count()) << " ns\n"
+        << num 
+        << " is " << val 
+        << "\n";
     return 0;
 }

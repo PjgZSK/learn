@@ -50,7 +50,7 @@ if has("win32") || has("win64")
 endif
 
 "clipboard
-set clipboard=unnamedplus
+set clipboard=unnamed
 
 "IM
 if has("gui_running")
