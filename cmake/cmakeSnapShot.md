@@ -26,6 +26,14 @@
     > endforeach()
     > ```
 
+## 3. quick start
+* most useful commands
+    > `cmake_minimum_required()`  
+    > `project()`  
+    > `add_executable()`  
+* build command
+    > 'cmake' configure build system  
+    > 'cmake --build' build
 
 ## fucking reference
 * learn cmake by read reference is a very very bad choose.
