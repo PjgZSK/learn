@@ -8,10 +8,12 @@
 typedef enum SquareRootImplemention
 {
     eMidSearch,
+    eNewton,
+    eFastInverse,
 }SRImplemention;
 
 float squareRoot(float v, const SRImplemention& implemention);
 float squareRootMid(float v);
-
-
+float squareRootNewton(float v);
+float squareRootFastInv(float v);
 
