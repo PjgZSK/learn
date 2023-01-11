@@ -9,6 +9,10 @@
 
 namespace pythagorean {
 
+/*
+ * 分数抽象类
+ * 分子，分母，符号位在分子部分
+ */
 struct Fraction
 {
     using punit = unsigned;
@@ -34,14 +38,14 @@ struct Fraction
     }
 
     void add(const Fraction& f) {
-        this->nume += f.nume;
-        this->deno += f.deno;
+        this->nume = this->nume * f.deno + f.nume * this->deno;
+        this->deno *= f.deno;
         minimize();
     }
     
     void subtract(const Fraction& f) {
-        this->nume -= f.nume;
-        this->deno -= f.deno;
+        this->nume = this->nume * f.deno - f.nume * this->deno;
+        this->deno *= f.deno;
         minimize();
     }
 
@@ -124,6 +128,9 @@ struct Fraction
     }
 };
 
+/*
+ * 毕达哥拉斯音级抽象类
+ */
 struct Pitch
 {
     Fraction value;
