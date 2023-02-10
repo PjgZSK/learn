@@ -4,7 +4,7 @@
     > value = sign * exponent * fraction  
 
 * IEEE 754 format
-    > sign : MSB  
+    > sign : MSB(Most Significant Byte)  
     > exponent
     > fraction : integer part has a default value and is not included
 
