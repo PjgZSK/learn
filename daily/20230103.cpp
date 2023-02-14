@@ -39,6 +39,10 @@ int main(int argc, char** argv)
     auto son = make_shared<Son>();//Son引用计数为1
     father->_son = son;//Son引用计数1+1，为2
     son->_father = father;//Father引用计数1+1，为2
+    /*
+     * ptr -> data <=> data <- ptr
+     */
+
     cout << "father use count : " << father.use_count() << endl;
     cout << "son use count : " << son.use_count() << endl;
     //father析构，Father引用计数2-1，为1
