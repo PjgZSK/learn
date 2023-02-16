@@ -21,4 +21,10 @@
 * open folder  
     `Ctrl+O`  
 * select activity windows  
-    `Alt+F7`
+    `Alt+F7`  
+* format code  
+    `Ctrl+K,Ctrl+F`  
+* previous  
+    `Ctrl+-`  
+* next  
+    `Ctrl+Shift+-`  
