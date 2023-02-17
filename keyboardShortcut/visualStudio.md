@@ -27,4 +27,8 @@
 * previous  
     `Ctrl+-`  
 * next  
-    `Ctrl+Shift+-`  
+    `Ctrl+Shift+-` 
+* fold code  
+    `Ctrl+M+M` //fold current code  
+    `Ctrl+M+L` //fold all code  
+
