@@ -31,4 +31,8 @@
 * fold code  
     `Ctrl+M+M` //fold current code  
     `Ctrl+M+L` //fold all code  
-
+* break point  
+    `F9` //add/delete break point  
+    `Ctrl+Shift+F9` //delete all break point  
+* close tab  
+    `Ctrl+F4` //close current tab
