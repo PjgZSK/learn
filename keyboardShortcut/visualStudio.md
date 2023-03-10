@@ -43,3 +43,6 @@
     `Alt+A` //replace all  
 * open solution explorer  
     `Ctrl+;`//open solution explorer serch box  
+* switch frame  
+    `Ctrl+Alt++` //next frame  
+    `Ctrl+Alt+-` //previous frame  
