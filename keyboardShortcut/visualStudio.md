@@ -35,4 +35,14 @@
     `F9` //add/delete break point  
     `Ctrl+Shift+F9` //delete all break point  
 * close tab  
-    `Ctrl+F4` //close current tab
+    `Ctrl+F4` //close current tab  
+* find and replace  
+    `Ctrl+F` //find  
+    `Ctrl+H` //replace  
+    `Alt+R` //replace one  
+    `Alt+A` //replace all  
+* open solution explorer  
+    `Ctrl+;`//open solution explorer serch box  
+* switch frame  
+    `Ctrl+Alt++` //next frame  
+    `Ctrl+Alt+-` //previous frame  
