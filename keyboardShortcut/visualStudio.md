@@ -46,3 +46,6 @@
 * switch frame  
     `Ctrl+Alt++` //next frame  
     `Ctrl+Alt+-` //previous frame  
+* show diagnostic tools  
+    `Ctrl+Alt+F2`  
+
