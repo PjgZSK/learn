@@ -30,7 +30,6 @@ set wrapmargin=6
 set textwidth=500
 set laststatus=2
 set ruler
-set guifont=Consolas:h12
 
 "color
 set t_Co=256
@@ -47,6 +46,9 @@ if has("win32") || has("win64")
     set pythonthreedll=python38.dll
     "set pythonthreehome="C:\Program Files\Python38"
     "set pythonhome='C:\Python27'
+    set guifont=Consolas:h12
+else
+    set guifont=Monaco:h18
 endif
 
 "clipboard
