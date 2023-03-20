@@ -1,16 +1,16 @@
 # Hello Triangle
 ## Quick Check
-1. opengl quick check  
+1. OpenGL quick check  
 2. graphics pipeline  
 3. shader  
 4. the stages of graphics pipeline
 5. vertex input  
 6. vertex shader
 
-* opengl is 3d and screen or windows is 2d  
-* a large part of opengl's work is about transforming all 3d coordinates to 2d pixels than fit your screen  
+* OpenGL is 3d and screen or windows is 2d  
+* a large part of OpenGL's work is about transforming all 3d coordinates to 2d pixels than fit your screen  
 
-* graphics pipeline of opengl manage the process of transforming 3d coordinates to 2d pixels  
+* graphics pipeline of OpenGL manage the process of transforming 3d coordinates to 2d pixels  
 * graphics pipeline :  
     1. transforming 3d coordinates to 2d coordinates  
     2. transforming 2d coordinates into actual colored pixels  
@@ -31,8 +31,8 @@
 * vertex data is a list of 3d coordinates than should form a triangle and is represented using vertex attributes that can contain any data  
     we like, but for simplicity's sake let's assume that each vertex consists of just a 3d position and some color value.  
 * primitives  
-    for opengl to know what to make of your collection of coordinates and color values opengl requires you to hint what kind of render types  
-    you want to form with the data. those hints are called primitives and are gived to opengl while calling ang of the drawing commands.  
+    for OpenGL to know what to make of your collection of coordinates and color values OpenGL requires you to hint what kind of render types  
+    you want to form with the data. those hints are called primitives and are gived to OpenGL while calling ang of the drawing commands.  
     some of these hints are GL_POINTS, GL_TRIANGLES and GL_LINE_STRIP.  
 * vertex shader :  
     vertex shader takes as input a single vertex  
@@ -52,9 +52,9 @@
     before the fragment shaders run, *clipping* is performed.  
     clipping discard all fragments that are outside your view, increasing performance  
 * fragment shader :  
-    *a fragment in opengl is all the data required for opengl to render a single pixel*  
+    *a fragment in OpenGL is all the data required for OpenGL to render a single pixel*  
     the main purpose of fragment shader is to calculate the final color of a pixel and this  
-        is usually the stage where all the advanced opengl effect occur.  
+        is usually the stage where all the advanced OpenGL effect occur.  
     usually the fragment shader contains data about 3d scene that it can use to calculate the final pixel color(like lights,  
         shadows, color of the light and so on.)  
 * alpha test and blending :  
@@ -66,7 +66,7 @@
 * other  
     tessellation stage  
     transform feedback loop  
-* in modern opengl we are required to defined at least a vertex and fragment shader of our own(there is no default vertex/fragment  
+* in modern OpenGL we are required to defined at least a vertex and fragment shader of our own(there is no default vertex/fragment  
     shaders on the GPU)  
 
 * normalized device coordinates(NDC)  
@@ -79,7 +79,7 @@
         with glViewport  
     the resulting screen-space coordinates are then transform to fragments as inputs to your fragment shader.  
     the function requires 4 coordinates for the left, bottom, right and top coordinates of your viewport rectangle. the coordinates  
-        specified tell opengl how to map its NDC to *windows coordinates*(in the range as specified by the given coordinates)  
+        specified tell OpenGL how to map its NDC to *windows coordinates*(in the range as specified by the given coordinates)  
 * define a triangle vertex data in NDC in a float array :  
     ```
     float vertices[] = {
@@ -90,10 +90,10 @@
     ```
 * send vertex data at input to the first process of the graphics pipeline : vertex shader  
     1. create memory on the GPU where we store the vertex data  
-    2. configue how opengl should interpret the memory  
+    2. configue how OpenGL should interpret the memory  
     3. specify how to send the data to the graphics card  
 * *vertex buffer objects(VBO)*  
-    vbo is opengl object that has a unique ID.  
+    vbo is OpenGL object that has a unique ID.  
     we manage GPU's vertex memory by vbo that can store a large number of vertex data in GPU's memory. the advantage of using   
         those buffer objects is that we can send large batches of data all at once to the graphics card, and keep it there if  
         there's enough memory left, without having to send data one vertex at once.  
@@ -105,7 +105,7 @@
     glGenBuffers(1, &VBO);
     ```
 * glBindBuffer  
-    opengl has many types of buffer objects and the buffer type of vertex buffer object is GL_ARRAY_BUFFER.  
+    OpenGL has many types of buffer objects and the buffer type of vertex buffer object is GL_ARRAY_BUFFER.  
     we can bind the newly created buffer to the GL_ARRAY_BUFFER target with glBindBuffer function :  
     ```
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -125,8 +125,35 @@
     the position data of the triangle does not change, is used a lot, and stay the same for every render call  
         so its usage type should best be *GL_STATIC_DRAW*.  
 
+* vector  
+    In graphics programming we use the mathematical concept of a vector quite often, since it neatly  
+        represents positions/directions in any space and has useful mathematical propertice.  
+    A vector in GLSL has a maximum size of 4 and each of its values can be retrieved via *vec.x*,  
+        *vec.y*, *vec.z* and *vec.w* respectively where each of them represents a coordinate in space.  
+    Note that the *vec.w* component is not used as a position in space, but it used for something called  
+        *perspective division*.
+* vertex shader  
+    ```
+    #version 330 core
+    layout (location = 0) in vec3 aPos;
+
+    void main()
+    {
+        gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+    }
+    ```
+    Vertex shader begin with a declaration of its version. Since OpenGL 3.3 and higher the version  
+        number of GLSL match the version of OpenGL(330 represent version 3.3). We also explicitly  
+        mention that we're using core profile functionality.  
+    Next we declare all the input vertex attributes in the vertex shader with the `in` keyword.  
+        right now we only care about position data so we only need a single vertex attribute.  
+    We also specifically set the location of the input variable via `layout (location = 0)`. 
+    The current vertex shader is probably the most simple vertex shader we can imagine because we  
+        did no processing whatsoever on the input data and simply forwarded it to the shader's output.  
+    In real applications the input data is usually not already in NDC so we first have to transform  
+        the input data to coordinates that fall within OpenGL's visible region.
 
 ## Question
 * how graphics cards work with parallel graphics pipeline ?
 
-link : https://learnopengl.com/Getting-started/Hello-Triangle
+link : https://learnOpenGL.com/Getting-started/Hello-Triangle
