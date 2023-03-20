@@ -4,6 +4,8 @@
 2. graphics pipeline  
 3. shader  
 4. the stages of graphics pipeline
+5. vertex input  
+6. vertex shader
 
 * opengl is 3d and screen or windows is 2d  
 * a large part of opengl's work is about transforming all 3d coordinates to 2d pixels than fit your screen  
@@ -35,7 +37,7 @@
 * vertex shader :  
     vertex shader takes as input a single vertex  
     the main purpose of the vertex shader is to transform 3d coordinates into different 3d coordinates and  
-    us to do some basic processing on the vertex attributes.  
+    allow us to do some basic processing on the vertex attributes.  
 * geometry shader :  
     the output of the vertex shader stage is optionally passed to the geometry shader.  
     the geometry shader takes as input a collection of vertices that form a primitives and  
@@ -61,6 +63,68 @@
     the stage check the corresponding depth(and stencil) value of fragment and use those to check if the resulting fragment  
         is in front of or behind other objects and should be discarded accordingly  
     the stage also check for alpha values(alpha values define the opacity of an object) and blends the objects accordingly.  
+* other  
+    tessellation stage  
+    transform feedback loop  
+* in modern opengl we are required to defined at least a vertex and fragment shader of our own(there is no default vertex/fragment  
+    shaders on the GPU)  
+
+* normalized device coordinates(NDC)  
+    NDC is in a small space where the x,y and z values vary from -1.0 to 1.0; all coordinates that fall outside this range  
+        will be discarded/clipped and won't be visible on your screen.
+    unlike usual screen coordinates, in NDC the positive y-axis in the up-direction and the (0,0) coordinates are at the  
+        center of graph, instead of top-left.  
+* glViewport  
+    your NDC coordinates will then be transform to screen-space coordinates via the viewport transform using data you provided  
+        with glViewport  
+    the resulting screen-space coordinates are then transform to fragments as inputs to your fragment shader.  
+    the function requires 4 coordinates for the left, bottom, right and top coordinates of your viewport rectangle. the coordinates  
+        specified tell opengl how to map its NDC to *windows coordinates*(in the range as specified by the given coordinates)  
+* define a triangle vertex data in NDC in a float array :  
+    ```
+    float vertices[] = {
+        -0.5f, -0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        0.0f, 0.5f, 0.0f
+    };        
+    ```
+* send vertex data at input to the first process of the graphics pipeline : vertex shader  
+    1. create memory on the GPU where we store the vertex data  
+    2. configue how opengl should interpret the memory  
+    3. specify how to send the data to the graphics card  
+* *vertex buffer objects(VBO)*  
+    vbo is opengl object that has a unique ID.  
+    we manage GPU's vertex memory by vbo that can store a large number of vertex data in GPU's memory. the advantage of using   
+        those buffer objects is that we can send large batches of data all at once to the graphics card, and keep it there if  
+        there's enough memory left, without having to send data one vertex at once.  
+    send data to graphics cards form cpu is relatively slow, so wherever we can we try to send as much data as possible at once.  
+* glGenBuffers  
+    we can generate one with a buffer id using the *glGenBuffers* function :  
+    ```
+    unsigned int VBO;
+    glGenBuffers(1, &VBO);
+    ```
+* glBindBuffer  
+    opengl has many types of buffer objects and the buffer type of vertex buffer object is GL_ARRAY_BUFFER.  
+    we can bind the newly created buffer to the GL_ARRAY_BUFFER target with glBindBuffer function :  
+    ```
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    ```
+    from this point on any buffer calls we make(on the GL_ARRAY_BUFFER target) will be used to configure the  
+        currently bound buffers, which is `VBO`.  
+* glBufferData  
+    so we can make a call to the glBufferData that copies the previously vertex data into the buffer's memory :  
+    ```
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    ```
+    the function allocates memory and stores data within the initialized memory in the currently bound buffer object.  
+    the fourth parameter specifies how we want graphics card to manager the given data. this can take 3 forms :  
+        1. *GL_STREAM_DRAW* : the data is set only once and used by GPU at most a few times.  
+        2. *GL_STATIC_DRAW* : the data is set only once and used by many times.  
+        3. *GL_DYNAMIC_DRAW* : the data is changed a lot and used by many times.  
+    the position data of the triangle does not change, is used a lot, and stay the same for every render call  
+        so its usage type should best be *GL_STATIC_DRAW*.  
+
 
 ## Question
 * how graphics cards work with parallel graphics pipeline ?
