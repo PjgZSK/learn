@@ -6,6 +6,9 @@
 4. the stages of graphics pipeline
 5. vertex input  
 6. vertex shader
+7. fragment shader
+8. shader program
+9. link vertex attributes
 
 * OpenGL is 3d and screen or windows is 2d  
 * a large part of OpenGL's work is about transforming all 3d coordinates to 2d pixels than fit your screen  
@@ -14,7 +17,7 @@
 * graphics pipeline :  
     1. transforming 3d coordinates to 2d coordinates  
     2. transforming 2d coordinates into actual colored pixels  
-* the graphics pipeline can divided into serveral steps where each steps requires the output of previous step as its input  
+* the graphics pipeline can divIDed into serveral steps where each steps requires the output of previous step as its input  
 
 * all of the steps are highly specialized and can easily to be executed in parallel  
 * because of parallel nature, graphics cards of today have thousands of small process cores to   
@@ -50,7 +53,7 @@
         the resulting primitives to the corresponding pixels on the final screen, result in fragments  
         for fragment shader to use.  
     before the fragment shaders run, *clipping* is performed.  
-    clipping discard all fragments that are outside your view, increasing performance  
+    clipping discard all fragments that are outsIDe your view, increasing performance  
 * fragment shader :  
     *a fragment in OpenGL is all the data required for OpenGL to render a single pixel*  
     the main purpose of fragment shader is to calculate the final color of a pixel and this  
@@ -70,12 +73,12 @@
     shaders on the GPU)  
 
 * normalized device coordinates(NDC)  
-    NDC is in a small space where the x,y and z values vary from -1.0 to 1.0; all coordinates that fall outside this range  
+    NDC is in a small space where the x,y and z values vary from -1.0 to 1.0; all coordinates that fall outsIDe this range  
         will be discarded/clipped and won't be visible on your screen.
     unlike usual screen coordinates, in NDC the positive y-axis in the up-direction and the (0,0) coordinates are at the  
         center of graph, instead of top-left.  
 * glViewport  
-    your NDC coordinates will then be transform to screen-space coordinates via the viewport transform using data you provided  
+    your NDC coordinates will then be transform to screen-space coordinates via the viewport transform using data you provIDed  
         with glViewport  
     the resulting screen-space coordinates are then transform to fragments as inputs to your fragment shader.  
     the function requires 4 coordinates for the left, bottom, right and top coordinates of your viewport rectangle. the coordinates  
@@ -99,7 +102,7 @@
         there's enough memory left, without having to send data one vertex at once.  
     send data to graphics cards form cpu is relatively slow, so wherever we can we try to send as much data as possible at once.  
 * glGenBuffers  
-    we can generate one with a buffer id using the *glGenBuffers* function :  
+    we can generate one with a buffer ID using the *glGenBuffers* function :  
     ```
     unsigned int VBO;
     glGenBuffers(1, &VBO);
@@ -148,10 +151,133 @@
     Next we declare all the input vertex attributes in the vertex shader with the `in` keyword.  
         right now we only care about position data so we only need a single vertex attribute.  
     We also specifically set the location of the input variable via `layout (location = 0)`. 
+    The gl_Position variable is predefined output variable and is a vec4 behind the scenes.
     The current vertex shader is probably the most simple vertex shader we can imagine because we  
-        did no processing whatsoever on the input data and simply forwarded it to the shader's output.  
+        dID no processing whatsoever on the input data and simply forwarded it to the shader's output.  
     In real applications the input data is usually not already in NDC so we first have to transform  
         the input data to coordinates that fall within OpenGL's visible region.
+* compiling a shader  
+    ```
+    const char* vertexShaderSource = "#version 330 core\n"
+        "layout (location = 0) in vec3 aPos;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+        "}\0";
+    ```
+    We take the source code for vertex shader and store it in a const C string at the top of the code file.  
+    ```
+    unsigned int vertexShader;
+    vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    ```
+    In order for OpenGL to use the shader it has to dynamically compile it at run-time from its source code.  
+    The first thing we need to do is create a shader object, again referenced by an ID.  
+    So we store the vertex shader with an unsigned int and create the shader with glCreateShader.  
+    We provide the type of shader we want to create as an argument to glCreateShader. the argument can  
+        take one of the following values:  
+            GL_COMPUTE_SHADER  
+            GL_VERTEX_SHADER  
+            GL_TESS_CONTROL_SHADER  
+            GL_TESS_EVALUATION_SHADER  
+            GL_GEOMETRY_SHADER  
+            GL_FRAGMENT_SHADER  
+    ```
+    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+    glCompileShader(vertexShader);
+    ```
+    Now we attach the shader source code to the shader object and compile shader.  
+    The glShaderSource function :  
+        `glShaderSource(GLuint shader, GLsizei count, const GLchar** string, const GLint* length)`  
+        *shader* : shader unsigned reference  
+        *count* : the number of elements in the *string* array  
+        *string* : an array of points to strings containing the source code to be load in the shader  
+        *length* : an array of string lengths
+* check compilation results  
+    Checking for compile-time error : 
+    ```
+    int success;
+    char infoLog[512];
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        glGetShaderInfoLog(vertexShader, 512, NULL, infolog);
+        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
+    ```
+    glGetShaderiv : query a shader for information given a object parameter.  
+    glGetShaderInfoLog : return the information log for a shader object.  
+
+* RGBA  
+    Color in computer graphics are represented as an array of 4 values : the red, green, blue and  
+        alpha(opacity) component, commonly abbreviated to RGBA.  
+    When defining a color in OpenGL or GLSL we set the strength of each component to a value between  
+        0.0 and 1.0. Given those 3 color components we can generate over 16 million(256 bit in every conponent) different colors!  
+* fragment shader  
+    The fragment shader is all about calculate the color output of your pixels.  
+    ```
+    #version 330 core
+    out vec4 FragColor;
+    void main()
+    {
+        FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+    }
+    ```
+    The fragment shader only requries one output variable and that is a vector of size 4 that defines the  
+        final color output that we should calculate ourselves.  
+    We can declare the output value with the *out* keyword, that we here promptly named *FragColor*.  
+    Next we assign a vec4 to the color output as an orange color with an alpha value of 1.0(1.0 being  
+        completely opaque).  
+* compiling fragment shader  
+    The process of compiling a fragment shader is similar to the vertex shader.  
+    ```
+    unsigned int fragmentShader;
+    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    glCompileShader(fragmentShader);
+    ```
+    Both the shaders are now compiled and the only thing left to do is link both shader objects into  
+        a *shader program* that we can use for rendering. Make sure to check compile error here as well.  
+
+* shader program  
+    A shader program is the final version of multiple shader combined. To use the recently compiled  
+        shaders we have to *link* them to a shader program object and then activate this shader  
+        program when rendering objects. The activated shader program's shaders will be used when  
+        we issue render calls.
+    When linking the shaders into a program it links the outputs of each shader to the inputs of  
+        the next shader. This is also where you'll get linking errors if your outputs and inputs  
+        do not match.  
+    ```
+    unsigned int shaderProgram;
+    shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+    ```
+    The glCreateProgram functions creates a program and return the ID reference to newly created   
+        program object.  
+    Now we need to attach the previously compiled shaders to the program object and then link  
+        them with glLinkProgram.  
+    ```
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    if (!success)
+    {
+        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+        ...
+    }
+    ```
+    Just check shader compilation we can also check if linking a shader program failed and  
+        retrieve the corresponding log.  
+* We are almost there, but not quite yet.  
+    OpenGL does not yet know how it should interpret the vertex data in the memory and how  
+        it should connect the vertex data to the vertex shader's attributes.
+
+* linking vertex attributes  
+    The vertex shader allow us to specify any input we want in the form of vettex attributes  
+        and while this allows for great flexibility, it does mean we have to manually specify  
+        what part of our input data goes to which vertex attributes in the vertex shader.  
+    This means we have to specify how OpenGL should interpret the vertex data before rendering.  
+* glVertexAttribPointer  
+
 
 ## Question
 * how graphics cards work with parallel graphics pipeline ?
