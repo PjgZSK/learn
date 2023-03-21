@@ -9,6 +9,7 @@
 7. fragment shader
 8. shader program
 9. link vertex attributes
+10. vertex array object
 
 * OpenGL is 3d and screen or windows is 2d  
 * a large part of OpenGL's work is about transforming all 3d coordinates to 2d pixels than fit your screen  
@@ -277,6 +278,62 @@
         what part of our input data goes to which vertex attributes in the vertex shader.  
     This means we have to specify how OpenGL should interpret the vertex data before rendering.  
 * glVertexAttribPointer  
+    ```
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    ```
+    ```
+    glVertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei
+        stride, const GLvoid * pointer)
+    ```
+    *index* : specify which vertex attribute we want to configue. Remember that we specified  
+        the location of position vertex attribute in the vertex shader with *layout (location = 0)*  
+        This sets the location of the vertex attribute to 0 and since we want to pass data to  
+        this vertex attribute, we pass in 0.
+    *size* : specify the size of vertex attribute. The vertex attribute is a vec3 so it is composed  
+        of 3 values.  
+    *type* : specify the type of the data which is GL_FLOAT.  
+    *normalized* : specify if we want the data to be normalized.  
+    *stride* : tell us the space between consecutive vertex attribute.  
+    *pointer* : offset of where the position data begins in the buffer.  
+    Each vertex attribute takes its data from memory managed by VBO and which VBO it takes its data  
+        form is determined by the VBO currently bound to GL_ARRAY_BUFFER when calling glVertexAttribPointer.  
+        Since the previously defined VBO is still bound before calling glVertexAttribPointer vertex  
+        attribute 0 is now associated with its vertex data.  
+* glEnableVertexAttribArray  
+    Now that we specified how OpenGL should interpret the vertex data we should also enable the vertex  
+        attribute with glEnableVertexAttribArray giving the vertex attribute location as its argument.  
+    Vertex attribute are disabled by default.  
+    From that points on we have everything set up :  
+        1. we initialized the vertex data in a buffer using a vertex buffer object.  
+        2. set up a vertex and fragment shader.  
+        3. tell OpenGL how to link the vertex data to the vertex shader's vertex attributes.  
+    ```
+    //0. copy our vertices array in a buffer for OpenGL to use
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    //1. then set the vertex attributes pointers
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    //2. use our shader program when we want to render an object
+    glUseProgram(shaderProgram);
+    //3. now draw the object
+    someOpenGLFunctionThatDrawOurTriangle();
+    ```
+    We have to repeat this process every time we want to draw an object.  
+    What if there was some way we could store all these state configurations into a object and  
+        simply bind this object to restore its state ?  
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## Question
