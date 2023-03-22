@@ -25,15 +25,6 @@
 
 
 ## shader  
-## the stages of graphics pipeline
-## vertex input  
-## vertex shader
-## fragment shader
-## shader program
-## link vertex attributes
-## vertex array object
-## draw triangle  
-
 * all of the steps are highly specialized and can easily to be executed in parallel  
 * because of parallel nature, graphics cards of today have thousands of small process cores to   
     quickly process your data within the graphics pipeline.  
@@ -43,6 +34,8 @@
     replace the existing default shaders  
 * shaders are written by OpenGL Shading Language(GLSL)  
 
+
+## the stages of graphics pipeline
 * abstract representation of all stages of graphics pipeline(note that italic sections represent sections where we can inject our own shaders)  : 
     input : vertex data  
     stages : *vertex shader* -> shape assemblely -> *geometry shader* -> rasterization -> *fragment shader* -> tests and blending  
@@ -87,6 +80,8 @@
 * in modern OpenGL we are required to defined at least a vertex and fragment shader of our own(there is no default vertex/fragment  
     shaders on the GPU)  
 
+
+## vertex input  
 * normalized device coordinates(NDC)  
     NDC is in a small space where the x,y and z values vary from -1.0 to 1.0; all coordinates that fall outsIDe this range  
         will be discarded/clipped and won't be visible on your screen.
@@ -143,6 +138,8 @@
     the position data of the triangle does not change, is used a lot, and stay the same for every render call  
         so its usage type should best be *GL_STATIC_DRAW*.  
 
+
+## vertex shader
 * vector  
     In graphics programming we use the mathematical concept of a vector quite often, since it neatly  
         represents positions/directions in any space and has useful mathematical propertice.  
@@ -222,6 +219,8 @@
     glGetShaderiv : query a shader for information given a object parameter.  
     glGetShaderInfoLog : return the information log for a shader object.  
 
+
+## fragment shader
 * RGBA  
     Color in computer graphics are represented as an array of 4 values : the red, green, blue and  
         alpha(opacity) component, commonly abbreviated to RGBA.  
@@ -253,6 +252,8 @@
     Both the shaders are now compiled and the only thing left to do is link both shader objects into  
         a *shader program* that we can use for rendering. Make sure to check compile error here as well.  
 
+
+## shader program
 * shader program  
     A shader program is the final version of multiple shader combined. To use the recently compiled  
         shaders we have to *link* them to a shader program object and then activate this shader  
@@ -286,6 +287,8 @@
     OpenGL does not yet know how it should interpret the vertex data in the memory and how  
         it should connect the vertex data to the vertex shader's attributes.
 
+
+## link vertex attributes
 * linking vertex attributes  
     The vertex shader allow us to specify any input we want in the form of vettex attributes  
         and while this allows for great flexibility, it does mean we have to manually specify  
@@ -338,6 +341,8 @@
     What if there was some way we could store all these state configurations into a object and  
         simply bind this object to restore its state ?  
 
+
+## vertex array object
 * vertex array object  
     A vertex array object (also know as VAO) can be bound just like a vertex buffer object and  
         any subsequent vertex attribute calls from that point on will be stored inside the VAO.  
@@ -387,6 +392,8 @@
     The moment we want to draw one of our objects, we take the corresponding VAO,  
         bind it, then draw the object and unbind VAO again.  
 
+
+## draw triangle  
 * draw triangle  
     To draw our objects of choice, OpenGL provides us with the glDrawArrays function that  
         draw primitives using the currently active shader, the previously defined vertex  
@@ -408,10 +415,6 @@
         GL_QUAD_STRIP  
         GL_QUADS  
         GL_POLYGON  
-    *first* : Specifies the staring index of the vertex array we like to draw  
-    *count* : Specifies how many vertices we want to draw  
-    *first* : Specifies the staring index of the vertex array we like to draw  
-    *count* : Specifies how many vertices we want to draw  
     *first* : Specifies the staring index of the vertex array we like to draw  
     *count* : Specifies how many vertices we want to draw  
 
