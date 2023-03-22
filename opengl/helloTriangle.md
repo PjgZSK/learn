@@ -10,15 +10,29 @@
 8. shader program
 9. link vertex attributes
 10. vertex array object
+11. draw triangle  
 
+## OpenGL quick check  
 * OpenGL is 3d and screen or windows is 2d  
 * a large part of OpenGL's work is about transforming all 3d coordinates to 2d pixels than fit your screen  
 
+## graphics pipeline  
 * graphics pipeline of OpenGL manage the process of transforming 3d coordinates to 2d pixels  
 * graphics pipeline :  
     1. transforming 3d coordinates to 2d coordinates  
     2. transforming 2d coordinates into actual colored pixels  
 * the graphics pipeline can divIDed into serveral steps where each steps requires the output of previous step as its input  
+
+
+## shader  
+## the stages of graphics pipeline
+## vertex input  
+## vertex shader
+## fragment shader
+## shader program
+## link vertex attributes
+## vertex array object
+## draw triangle  
 
 * all of the steps are highly specialized and can easily to be executed in parallel  
 * because of parallel nature, graphics cards of today have thousands of small process cores to   
@@ -324,8 +338,82 @@
     What if there was some way we could store all these state configurations into a object and  
         simply bind this object to restore its state ?  
 
+* vertex array object  
+    A vertex array object (also know as VAO) can be bound just like a vertex buffer object and  
+        any subsequent vertex attribute calls from that point on will be stored inside the VAO.  
+    This has the advantage that when configuring vertex attribute pointers you only have to make  
+        those calls once and whenever we want to draw the objects, we can just bind the corresponding  
+        VAO.  
+    *Core OpenGL requires that we use VAO so it knows what to do with our vertex inputs. If we  
+        fail to bind VAO, OpenGL will most likely refuse to draw anything.*  
+    A vertex array object stores following :  
+        1. Calls to glEnableVertexAttribArray or glDisableVertexAttribArray.  
+        2. Vertex attribute configurations via glVertexAttribPointer.  
+        3. Vertex buffer objects associated with vertex attributes by calls to glVertexAttribPointer.  
+* use VAO  
+    The process of generate VAO is similar with VBO :  
+    ```
+    unsigned int VAO;
+    glGenVertexArrays(1, &VAO);
+    ```
+    To use a VAO all you have to do is bind the VAO using glBindVertexArray.  
+    From that point on we shoud bind/configure the corresponding VBO and attribute pointer and then  
+        unbind the VAO for later use.  
+    As soon as we want to draw an object, we simply bind the VAO with the preferred setttings before  
+        drawing the object and that is it.  
+    ```
+    // ..:: Initialization code (done once (unless your object frequently changes)) ::..
+    // 1. bind vertex array object
+    glBindVertexArray(VAO);
+    // 2. copy our vertices array in a buffer for OpenGL to use  
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    // 3. then set our vertex attribute pointers
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    
+    [...]
 
+    // ..:: Drawing code (in render loop) ::..
+    // 4. draw the object
+    glUseProgram(shaderProgram);
+    glBindVertexArray(VAO);
+    someOpenGLFunctionThatDrawOurTriangle();
+    ```
+    A VAO stores our vertex attribute configuration and which VBO use. Usually when  
+        you have multiple objects you want to draw, you first generate/configure all  
+        the VAOs(and thus the requires VBO and attribute pointers) and stores those  
+        for later use.  
+    The moment we want to draw one of our objects, we take the corresponding VAO,  
+        bind it, then draw the object and unbind VAO again.  
 
+* draw triangle  
+    To draw our objects of choice, OpenGL provides us with the glDrawArrays function that  
+        draw primitives using the currently active shader, the previously defined vertex  
+        attribute configuration and with the VBO's vertex data(indirectly bound via VAO).  
+    ```
+    glUseProgram(shaderProgram);
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLE, 0, 3);
+    ```
+    `glDrawArrays(GLenum mode, GLint first, GLsizei count)`  
+    *mode* : Specifies the kind of primitive to render, can take the follow values:  
+        GL_POINTS  
+        GL_LINE_STRIP  
+        GL_LINE_LOOP  
+        GL_LINES  
+        GL_TRIANGLE_STRIP  
+        GL_TRIANGLE_FAN  
+        GL_TRIANGLES  
+        GL_QUAD_STRIP  
+        GL_QUADS  
+        GL_POLYGON  
+    *first* : Specifies the staring index of the vertex array we like to draw  
+    *count* : Specifies how many vertices we want to draw  
+    *first* : Specifies the staring index of the vertex array we like to draw  
+    *count* : Specifies how many vertices we want to draw  
+    *first* : Specifies the staring index of the vertex array we like to draw  
+    *count* : Specifies how many vertices we want to draw  
 
 
 
