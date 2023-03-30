@@ -21,7 +21,7 @@
 * graphics pipeline :  
     1. transforming 3d coordinates to 2d coordinates  
     2. transforming 2d coordinates into actual colored pixels  
-* the graphics pipeline can divIDed into serveral steps where each steps requires the output of previous step as its input  
+* the graphics pipeline can divided into serveral steps where each steps requires the output of previous step as its input  
 
 
 ## shader  
@@ -61,7 +61,7 @@
         the resulting primitives to the corresponding pixels on the final screen, result in fragments  
         for fragment shader to use.  
     before the fragment shaders run, *clipping* is performed.  
-    clipping discard all fragments that are outsIDe your view, increasing performance  
+    clipping discard all fragments that are outside your view, increasing performance  
 * fragment shader :  
     *a fragment in OpenGL is all the data required for OpenGL to render a single pixel*  
     the main purpose of fragment shader is to calculate the final color of a pixel and this  
@@ -83,12 +83,12 @@
 
 ## vertex input  
 * normalized device coordinates(NDC)  
-    NDC is in a small space where the x,y and z values vary from -1.0 to 1.0; all coordinates that fall outsIDe this range  
+    NDC is in a small space where the x,y and z values vary from -1.0 to 1.0; all coordinates that fall outside this range  
         will be discarded/clipped and won't be visible on your screen.
     unlike usual screen coordinates, in NDC the positive y-axis in the up-direction and the (0,0) coordinates are at the  
         center of graph, instead of top-left.  
 * glViewport  
-    your NDC coordinates will then be transform to screen-space coordinates via the viewport transform using data you provIDed  
+    your NDC coordinates will then be transform to screen-space coordinates via the viewport transform using data you provided  
         with glViewport  
     the resulting screen-space coordinates are then transform to fragments as inputs to your fragment shader.  
     the function requires 4 coordinates for the left, bottom, right and top coordinates of your viewport rectangle. the coordinates  
@@ -110,7 +110,7 @@
     we manage GPU's vertex memory by vbo that can store a large number of vertex data in GPU's memory. the advantage of using   
         those buffer objects is that we can send large batches of data all at once to the graphics card, and keep it there if  
         there's enough memory left, without having to send data one vertex at once.  
-    send data to graphics cards form cpu is relatively slow, so wherever we can we try to send as much data as possible at once.  
+    send data to graphics cards from cpu is relatively slow, so wherever we can we try to send as much data as possible at once.  
 * glGenBuffers  
     we can generate one with a buffer ID using the *glGenBuffers* function :  
     ```
@@ -165,7 +165,7 @@
     We also specifically set the location of the input variable via `layout (location = 0)`. 
     The gl_Position variable is predefined output variable and is a vec4 behind the scenes.
     The current vertex shader is probably the most simple vertex shader we can imagine because we  
-        dID no processing whatsoever on the input data and simply forwarded it to the shader's output.  
+        did no processing whatsoever on the input data and simply forwarded it to the shader's output.  
     In real applications the input data is usually not already in NDC so we first have to transform  
         the input data to coordinates that fall within OpenGL's visible region.
 * compiling a shader  
@@ -290,7 +290,7 @@
 
 ## link vertex attributes
 * linking vertex attributes  
-    The vertex shader allow us to specify any input we want in the form of vettex attributes  
+    The vertex shader allow us to specify any input we want in the form of vertex attributes  
         and while this allows for great flexibility, it does mean we have to manually specify  
         what part of our input data goes to which vertex attributes in the vertex shader.  
     This means we have to specify how OpenGL should interpret the vertex data before rendering.  
