@@ -418,6 +418,23 @@
     *first* : Specifies the staring index of the vertex array we like to draw  
     *count* : Specifies how many vertices we want to draw  
 
+## Element Buffer Objects  
+1. There is one last thing we'd like to discuss when rendering vertices and that  
+is element buffer objects abbreviated to EBO.  
+2. Suppose we want to draw a rectangle instead of a triangle. We can draw a rectangle  
+using two triangles(OpenGL mainly works with triangles). This will generate the following  
+set of vertices :  
+```
+float vertices[] = {
+    // first triangle
+    0.5f, 0.5f, 0.0f, // top right
+    0.5f, -0.5f, 0.0f, // bottom right
+    -0.5f, 0.5f, 0.0f, // top left
+    // second triangle
+    0.5f, -0.5f, 0.0f, // bottom right
+    -0.5f, -0.5f, 0.0f, // bottom left
+    -0.5f, 0.5f, 0.0f // top left
+```
 
 
 
