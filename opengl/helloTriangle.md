@@ -435,11 +435,87 @@ float vertices[] = {
     -0.5f, -0.5f, 0.0f, // bottom left
     -0.5f, 0.5f, 0.0f // top left
 ```
+3. As you can see, there is some overlap on the vertices specified . We specify bottom right   
+and top right twice. This is an overhead of 50% since the same rectangle could also be specified  
+by 4 vertices, instead of 6. This will get worse as soon as we have more complex models that  
+have over 1000s of triangles where there will be large chunks that overlap. What would be  
+a better solution is to store only the unique vertices and then at which we want to draw  
+these vertices in. In that case we only need store 4 vertices for the rectangle, and then  
+just specify at which order we'd like to draw them.  
+4. Thankfully, element buffer objects work exactly like that. An EBO is a buffer, just like  
+a vertex buffer object, that stores the indices that OpenGL uses to decide what vertices   
+to draw. This is so called indexed drawing is exactly the solution to our problem.   
+5. To get started we first have to specify the (unique) vertices and the indices to draw  
+them as a rectangle.  
+```
+float vertices[] = {
+    0.5f, 0.5f, 0.0f, // top right
+    0.5f, -0.5f, 0.0f, // bottom right 
+    -0.5f, -0.5f, 0.0f, // bottom left  
+    -0.5f, 0.5f, 0.0f // top left
+```
+You can see that, when using indices, we only need 4 vertices instead of 6.  
+6. Next we need to creat the element buffer object :  
+```
+unsigned int EBO;
+glGenBuffers(1, &EBO);
+```
+Similar to the VBO we bind the EBO and copy the indices into the buffer with glBufferData.  
+Also, just like the VBO we want to place those calls between a bind and an unbind call,  
+although this time we specify GL_ELEMENT_ARRAY_BUFFER as the buffer typy.  
+```
+glBindBuffer(EBO, GL_ELEMENT_ARRAY_BUFFER);
+glBufferData(EBO, sizeof(indices), indices, GL_STATIC_DRAW);
+```
+Note that we're giving the GL_ELEMENT_ARRAY_BUFFER as buffer target. The last thing left  
+to do is replace the glDrawArrays call with glDrawElements to indicate we want to  
+render the triangles from an index buffer. When using glDrawElements we're going to draw  
+using indices provided in the element buffer object currently bound :  
+```
+glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+```
+The first argument specifies the mode we want to draw in, similar to glDrawArrays.  
+The second argument is the count or number of elements we'd like to draw. We specify  
+6 indices so we want to draw 6 vertices in total.  
+The third argument is the type of the indices which is of type GL_UNSIGNED_INT.  
+The last argument allows us to specify an offset in the EBO(or pass in an index  
+array, but that is when you're not using element buffer object), but we're just  
+going to leave this at 0.  
+7. The glDrawElements function takes its indices from the EBO currently bound to  
+the GL_ELEMENT_ARRAY_BUFFER target. This means we have to bind the corresponding  
+EBO each time we want to render an object with indices which again is a bit  
+cumbersome. It just so happens that a vertex array object also keep track  
+of element buffer object bindings. The last element buffer object that gets  
+bound while a VAO is bound, is stored as the VAO's element buffer object. Binding  
+to a VAO then also automatically binds that EBO.  
+8. *A VAO stores the glBindBuffer when the target is GL_ELEMENT_ARRAY_BUFFER.  
+This also means it stores unbind calls so make sure you don't unbind the  
+element array buffer before unbinding your VAO, otherwise it doesn't have  
+an EBO configured.*  
+9. The resulting initialization and drawing code now looks something like this :  
+```
+// ..:: Initialization code ::..
+// 1. bind vertex array object
+glBindBuffer(VAO);
+// 2. copy our vertices array in vertex buffer for OpenGL to use
+glBindBuffer(GL_ARRAY_BUFFER, VAO);
+glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+// 3. copy our index array in a element buffer for OpenGL to use
+glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+// 4. then set the vertex attributes pointers
+glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+glEnableVertexAttribArray(0);
 
+[...]
 
-
-
-
+// ..:: drawing code (in render loop) ::..
+glUseProgram(shaderProgram);
+glBindVertexArray(VAO);
+glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+glBindVertexArray(0);
+```
 
 
 
