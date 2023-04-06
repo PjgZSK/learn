@@ -283,6 +283,12 @@
     ```
     Just check shader compilation we can also check if linking a shader program failed and  
         retrieve the corresponding log.  
+    ```
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+    ```
+    Don't forget to delete the shader objects once we've linked them into the program object.  
+    We no longer need them anymore.  
 * We are almost there, but not quite yet.  
     OpenGL does not yet know how it should interpret the vertex data in the memory and how  
         it should connect the vertex data to the vertex shader's attributes.
@@ -517,6 +523,13 @@ glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 glBindVertexArray(0);
 ```
 
+## Additional resources
+1. [open.gl/drawing](https://open.gl/drawing) : Alexander Overvoorde's take on rendering the first triangle.  
+2. [learnopengl.com/In-Practice/Debugging](https://learnopengl.com/In-Practice/Debugging) :  
+There are a lot of steps involved in this chapter; If you're stuck it may be worthwhile to read a bit  
+on debugging in OpenGL(up until the debug output section).
+
+## Exercises
 
 
 
