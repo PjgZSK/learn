@@ -134,29 +134,3 @@ a simple boilerplate project that comes pre-configured with all relevant librari
 great for if you want a sample project without the hassle of having to compile all  
 the libraries yourself.  
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

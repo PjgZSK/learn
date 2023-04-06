@@ -212,8 +212,8 @@ while (!glfwwindowshouldclose(window))
     ...
 
     //check and call events and swap the buffers
-    glfwswapbuffers(window);
     glfwpollevents();
+    glfwswapbuffers(window);
 }
 ```
 We can clear the screen's color buffer using glClear where we pass in buffer  
@@ -232,40 +232,5 @@ state-setting function and glClear is a state-using function in that it uses
 the current state to retrieve the clearing color from.  
 3. So right now we got everything ready to fill the render loop with lots of  
 rendering calls.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
