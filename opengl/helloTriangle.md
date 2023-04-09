@@ -530,7 +530,10 @@ There are a lot of steps involved in this chapter; If you're stuck it may be wor
 on debugging in OpenGL(up until the debug output section).
 
 ## Exercises
-
+1. Try to draw 2 triangles next to each other using glDrawArrays by adding more vertices to your data.  
+2. Now create two same triangles using two different VAOs and VBOs for their data.  
+3. Create two shader program where the second use a different fragment shader that outputs the color  
+yellow; draw both triangles again where one outputs the color yellow.  
 
 
 ## Question
