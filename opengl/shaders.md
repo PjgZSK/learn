@@ -80,4 +80,184 @@ Vectors are thus flexible datatype that we can use for all kinds of input and ou
 book you'll see plenty of examples of how we can creatively manage vectors.  
 
 ## Ins and Outs
+1. Shaders are nice little programs on their own, but they are part of a whole and for that reason  
+we want to have inputs and outputs on the individual shaders so that we can move some staff around.  
+2. GLSL defined the in and out keyword specifically for that purpose. Each shader can specify inputs  
+and outputs using those keywords and wherever an output variable matches with an input variable of  
+next shader stage they're passed along. The vertex and fragment shader differ a bit though.  
+3. The vertex shader should receive some form of input otherwise it would be pretty ineffective.  
+The vertex shader differs in its input, in that it receives its input straight from the vertex data.  
+To define how the vertex data is organized we specify the input variables with location metadata so  
+we can configure the vertex attributes in CPU. We're seen this in the previous chapter as   
+layout (location = 0). The vertex shader thou requires extra layout specification for its input so  
+we can link it with the vertex data.  
+It is also possible to omit the layout (location = 0) specifier and query for the attribute locationd  
+in yout OpenGL code via glGetAttribLocation, but I'd prefer to set them in the vertex shader. It is  
+easier to understand and saves you (and OpenGL) some work.  
+4. The other exception is that the fragment shader requires a vec4 color output variable, since the  
+fragment shader needs to generate a final output color. If you fail to specify an output color in  
+your fragment shader, the color buffer output for those fragments will be undefined(which usually  
+means OpenGL will render them either white or black.  
+5. So if we want send data from one shader to the other we'd have to declare an output in the sending  
+shader and a similar input in receiving shader. When the type and name are equal on both sides OpenGL  
+will link those together and then it is possible to send data between shaders(this is done when linking  
+a program object).  
+6. To show you how this works in practice we're going to alter the shaders from the previous chapter to  
+let the vertex shader decide the color for the fragment shader.  
+7. In practice :   
+*Vertex shader*  
+```
+#version 330 core
+layout (location = 0) in vec3 aPos; // the position variable has attribute positon 0
+out vec4 vertexColor; // specify a color output to the fragment shader
+void main()
+{
+    gl_Position = vec4(aPos, 1.0); // see how we directly give a vec3 to vec4's constructor
+    vertexColor = vec4(0.5, 0.0, 0.0, 1.0); // set the output variable to dark-red color
+}
+```
+*Fragment shader*  
+```
+#version 330 core
+in vec4 vertexColor; // the input variable from the vertex shader (same name and same type)
+out vec4 FragColor;
+void main()
+{
+    FragColor = vertexColor;
+}
+```
+You can see we declared a vertexColor variable as a vec4 output in the vertex shader and  
+we declare a similar vertexColor variable as a vec4 input in the fragment shader.  
+Since they both have the same name and type, the vertexColor in the fragment shader is linked to  
+the vertexColor in the vertex shader.  
+8. There we go! We just managed to send a value from the vertex shader to the fragament shader.  
+Let's spice it a bit and see if we can send a color from our application to the fragment shader.  
 
+## Uniforms
+1. Uniforms are another way to pass data from our application on the CPU to the shaders on the GPU.  
+2. Uniforms are however slightly different compared to vertex attributes. First of all, uniforms are  
+global. Global, means that a uniform is unique per shader program object, and can be accessed from  
+any shader at any stage in the shader program. Second, whatever you set the uniform value to, uniforms  
+will keep their values until they're either reset or updated.  
+3. To declare a uniform in GLSL we simply add the uniform keyword to a shader with a type and a name.  
+From that point on we can use the newly created uniform in the shader.  
+4. Let's see this time we can set color of triangle via a uniform :  
+```
+#version 330 core
+uniform vec4 ourColor; // we set this variable in the OpenGL code.
+out vec4 fragColor;
+void main()
+{
+    fragColor = ourColor;
+}
+```
+We decalred a uniform vec4 ourColor in the fragment shader and set the fragment's output color to  
+the content of this uniform value. Since uniforms are global variables, we can define them in any  
+shader stage we'd like so no need to go through vertex shader again to get something to the fragment  
+shader. We're not using this uniform in the vertex shader so there's no need to define it there.  
+*If you declare a uniform that isn't used anywhere in your GLSL code the compiler will silently  
+remove the variable from the compiled version which is the cause for several frustrating errors;  
+Keep it in mind!*  
+5. The uniform is currently empty; We haven't added any data to the uniform yet so let's try that.  
+We first need to find the index/location of the uniform attribute in our shader. Once we have the  
+index/location of the uniform, we can update its value. Instead of passing a single color to the  
+fragment shader, let's spice things up by gradually changing color over time :  
+```
+float timeValue = glfwGetTime();
+float greenValue = (sin(timeValue) / 2) + 0.5f;
+int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+glUseProgram(shaderProgram);
+glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+```
+6. First, we retrieve the running time in seconds via glfwGetTime(). Then we vary the color in the  
+range from 0.0 to 1.0 by using the sin function and store the result in greenValue.  
+Then we query for the location of the ourColor uniform using glGetUniformLocation. We supply the  
+shader program and the name of the uniform(that we want to retrieve location from) to the query  
+function. If glGetUniformLocation returns -1, it could not find the location. Lastly we can set  
+the uniform value using the glUniform4f function.  
+Note that find the uniform location does not require you to use the program first, but updating  
+a uniform does require you to first use the program(by calling glUseProgram), because it sets  
+the uniform on the currently active shader program.  
+7. Because OpenGL is in its core a C library it does not have native support for function overloading,  
+so whenever a function can be called with different types OpenGL defines new functions for each type  
+required;  
+glUniform is a perfect example of this. The function requires a specific postfix for the type of the  
+uniform you want to set. A few of the possible postfixes are :  
+    * f : the function expects a float as its value.
+    * i : the function expects an int as its value.
+    * ui : the function expects an unsigned int as its value.
+    * 3f : the function expects 3 floats as its value.
+    * fv : the function expects a float vector/array as its value.  
+Whenever you want to configure an option of OpenGL simply pick the overloaded function that corresponding  
+with your type. In our case we want to set 4 floats of the uniform individually so we pass our data  
+via glUniform4f(note that we also could've used the fv version).  
+8. Now that we know how to set the values of uniform variables, we can use them for rendering.  
+If we want to the color to gradually change, we want to update this uniform every frame, otherwise the  
+triangle would maintain a single solid color if we only set it once. So we calculate the greenValue  
+and update the uniform each render iteration :  
+```
+while (!glfwWindowShouldClose(window))
+{
+    // input
+    processInput();
+
+    // render
+    // clear the colorbuffer
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // be sure to activate the shader
+    glUseProgram(shaderProgram);
+
+    // update the uniform color
+    float timeValue = glfwGetTime();
+    float greenValue = (sin(timeValue) / 2) + 0.5f;
+    int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+    glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+    
+    // now render the triangle
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    // swap buffers and poll IO events
+    glfwSwapBuffers(window);
+    glfwPollEvents();
+}
+```
+9. As you can see, uniforms are a useful tool for setting attributes that may  
+change every frame, or for interchanging data between your application and  
+shaders, but what if we want to set a color for each vertex ? In that case, we'd  
+have to declare as many uniforms as we have vertices. A better solution would  
+be to include more data in the vertex attributes which is what we're going to  
+do now.  
+
+## More attributes!
+1. We saw in the previous chapter how we can fill a VBO, configure vertex attributes  
+and store it all in a VAO. This time, we also want to add color data to the vertex  
+data.  
+2. We're going to add color data as 3 floats to the vertices array. We assign a red,  
+green and blue color to each of the corners of our triangle respectively :  
+```
+float vertices[] = {
+    // position        // color
+    0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom right
+   -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom left
+    0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, // top
+};
+```
+Since we now have more data to send to vertex shader, it is necessary to adjust the  
+vertex shader to also receive our color value as a vertex attribute input.  
+Note that we set the location of the aColor attribute to 1 with the layout specifier :  
+```
+#version 330 core
+layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec3 aColor;
+
+out vec3 ourColor;
+
+void main()
+{
+    gl_Position = vec4(aPos, 1.0);
+    ourColor = aColor;
+}
+```

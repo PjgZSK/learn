@@ -46,7 +46,7 @@ if has("win32") || has("win64")
     set pythonthreedll=python38.dll
     "set pythonthreehome="C:\Program Files\Python38"
     "set pythonhome='C:\Python27'
-    set guifont=Consolas:h16
+    set guifont=Consolas:h20
 else
     set guifont=Monaco:h18
 endif
