@@ -261,3 +261,45 @@ void main()
     ourColor = aColor;
 }
 ```
+3. Since we no long use a uniform for the fragment's color, but now use the ourColor output  
+variable we'll have to change the fragment shader as well :  
+```
+#version 330 core
+out vec4 fragColor;
+in vec3 ourColor;
+void main()
+{
+    fragColor = vec4(ourColor, 1.0);
+}
+```
+4. Because we added another vertex attribute and the update the VBO's memory we have to re-configure  
+the vertex attribute pointers.  
+```
+// position attribute
+glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertices), 6 * sizeof(float), (void*)0);
+glEnableVertexAttribArray(0);
+// color attribute
+glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertices), 6 * sizeof(float), (void*)(3 * sizeof(float)));
+glEnableVertexAttribArray(1);
+```
+The few arguments of glVertexAttribPointer are relatively straightforward. This time we are  
+configuring the vertex attribute on attribute location 1. The color values have a size of 3 floats  
+and we do not normalize the values.  
+Since we now have two vertex attributes we have to re-calculate stride value. To get the next attribute  
+value(e.g. the next x component of the position vector) in the data array we have to move 6 floats  
+to the right, three for the position values and three for the color values. This gives us a stride  
+of 6 times size of a float in bytes(=24bytes).  
+Also, this time we have to specify an offset. For each vertex, The position attribute is first so  
+we declare an offset of 0. The color attribute starts after the position so the offset is 3 * sizeof(  
+float) in bytes(=12bytes).  
+5. The image may not be exactly what you would expect, since we only supply 3 colors, not the huge color  
+palette we're seeing right now. This is all result of something called fragment interpolation in the  
+fragment shader.  
+When rendering a triangle the rasterization stage usually results in a lot more fragments than vertices  
+originlly specified. The rasterizer then determines the positions of each of those fragment based on  
+where they reside on the triangle shape. Based on the positions, it interpolates all the fragment shader's  
+input variables.  
+Say for example we have a line where the upper point has a green color and the lower point a blue point.  
+If the fragment shader is run at a fragment that resides around a position at 70% of the line, its resulting  
+color input attribute would then be a linear combination of green and blue; To more precise : 30% blue and  
+70% green.  
