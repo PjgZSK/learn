@@ -303,3 +303,179 @@ Say for example we have a line where the upper point has a green color and the l
 If the fragment shader is run at a fragment that resides around a position at 70% of the line, its resulting  
 color input attribute would then be a linear combination of green and blue; To more precise : 30% blue and  
 70% green.  
+6. This is exactly what happened at the triangle. We have 3 vertices and thus 3 colors, and judging from  
+the triangle's pixels it probably contains around 50000 fragments, where the fragment shader interpolated  
+the colors among those pixels.  
+If you take a good look at the colors you'll see it all makes sense : red to blue first gets to purple and  
+then to blue. Fragment interpolation is applied to all the fragment shader's input attributes.  
+
+## Our own shader class 
+1. Writing, compiling and managing shader can be quite cumbersome. As a final touch on the shader subject  
+we're going to make our life a bit easier by building a shader class that reads shaders from disks,   
+compiles and links them, checks for errors and is easy to use.  
+This also gives you a bit of an idea how we can encapsulate some of the knowledge we learned so far into  
+useful abstract objects.  
+2. We will create the shader class entirely in a header file, mainly for learning purposes and portability.  
+Let's start by adding the required includes and by defining the class structure :  
+```
+#ifndef SHADER_H
+#define SHADER_H
+
+#include <glad/glad.g> // include glad to get all the required OpenGL headers
+
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+
+class Shader
+{
+public:
+    // the program ID
+    unsigned int ID;
+
+    // constructor reads and builds the shader
+    Shader(const char* vertexPath, const char* fragmentPath);
+    // use/activate the shader
+    void use();
+    // utility uniform functions
+    void setBool(const std::string& name, bool value) const;
+    void setInt(const std::string& name, bool value) const;
+    void setFloat(const std::string& name, bool value) const;
+};
+
+#endif
+```
+We used several preprocessor directives at the top of the header file. Using these little lines  
+of code informs your compiler to only include and compile this header file if it hasn't been  
+included yet, even if multiple files include the shader header. This prevents linking conflicts.  
+3. The shader class holds the ID of the shader program. Its constructor requires the file paths  
+of the source code of the vertex and fragment shader respectively that we can store on disk as  
+simple text files. To add a little extra we also add sevaral utility functions to ease our lives  
+a little : use activates the shader program, and all set functions requery a uniform location and  
+set its value.  
+### Reading from file
+1. We're using C++ filestreams to read the content from the file into several string objects :  
+```
+Shader(const char* vertexPath, const char* fragmentPath)
+{
+    // 1. retrieve the vertex/fragment source code from filepath
+    std::string vertexCode;
+    std::string fragmentCode;
+    std::ifstream vShaderFile;
+    std::ifstream fShaderFile;
+    // ensure ifstream objects can throw exceptions : 
+    vShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
+    fShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
+    try
+    {
+        // open files
+        vShaderFile.open(vertexPath);
+        fShaderFile.open(fragmentPath);
+        std::stringstream vShaderStream, fShaderStream;
+        // read file's buffer contents into stream
+        vShaderStream << vShaderFile.rdbuf();
+        fShaderStream << fShaderFile.rdbuf();
+        // close file handlers
+        vShaderFile.close();
+        fShaderFile.close();
+        // convert stream into string
+        vertexCode = vShaderStream.str();
+        fragmentCode = fShaderStream.str();
+    }
+    catch(std::ifstream::failure e)
+    {
+        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ" << std::endl;
+    }
+    const char* vShaderCode = vertexCode.c_str();
+    const char* fShaderCode = fragmentCode.c_str();
+    [...]
+```
+2. Next we need to compile and link the shaders. Note that we're also reviewing if compilation/linking  
+failed and if so, print the compile-time errors. This is extremely useful when debugging(you are going  
+to need those error logs eventually) :  
+```
+// 2. compile shaders
+unsigned int vertex, fragment;
+int success;
+char infoLog[512];
+
+// vertex Shader
+vertex = glCreateShader(GL_VERTEX_SHADER);
+glShaderSource(vertex, 1, &vShaderCode, NULL);
+glCompileShader(vertex);
+// print compile error if any
+glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
+if (!success)
+{
+    glGetShaderInfoLog(vertex, 512, NULL, infoLog);
+    std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+}
+
+// similiar for Fragment Shader
+[...]
+
+// shader Program
+ID = glCreateProgram();
+glAttachShader(ID, vertex);
+glAttachShader(ID, fragment);
+glLinkProgram(ID);
+// print link error if any
+glGetProgramiv(ID, GL_LINK_STATUS, &success);
+if (!success)
+{
+    glGetProgramInfoLog(ID, 512, NULL, infoLog);
+    std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+}
+
+// delete the shaders as they're linked into our program and no longer necessary
+glDeleteShader(vertex);
+glDeleteShader(fragment);
+```
+The use function is straightforward :  
+```
+void use()
+{
+    glUseProgram(ID);
+}
+```
+Similarly for any of the uniform setter functions :  
+```
+void setBool(const std::string& name, bool value) const
+{
+    glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
+}
+void setInt(const std::string& name, int value) const
+{
+    glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+}
+void setFloat(const std::string& name, float value) const
+{
+    glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+}
+```
+3. And there we have it, a completed shader class. Using the shader class is fairly easy;  
+We create a shader object once and from that point on simply start using it :  
+```
+Shader ourShader("path/to/shaders/shader.vs", "path/to/shaders/shader.fs");
+[...]
+whiel(...)
+{
+    ourShader.use();
+    ourShader.setFloat("someUniform", 1.0f);
+    DrawStuff();
+}
+```
+Here we stored the vertex and fragment shader source code in two files called shader.vs and  
+shader.fs. You're free to name your shader files however you like; I personally find the extensions  
+.vs and .fs quite intuitive.  
+
+## Exercises
+1. Adjust the vertex shader so that the triangle is upside down.  
+2. Specify a horizontal offset via u uniform and move the triangle to the right side of the screen in  
+the vertex shader using this offset value.  
+3. Output the vertex position to the fragment shader using the out keyword and set the fragment's color  
+equal to this vertex position (see how even the vertex position values are interpolated across the triangle).  
+Once you managed to do this; Try to answer the following question : why is the bottom-left side of our  
+triangle black ?  
+
