@@ -284,4 +284,111 @@ glBindTexture(GL_TEXTURE_2D, texture);
 glBindVertexArray(VAO);
 glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 ```
+6. If your rectangle is completely white or black you probably made an error along the way.  
+*If your texture code doesn't work or shows up as completely back, continue reading and work your way to the  
+last example that should work. On some drivers it is required to assign a texture unit each sampler uniform,  
+which is something we will discuss further in this chapter.*  
+7. To get a little funky we can also mix the resulting texture color with the vertex color. We simply multiply  
+the resulting texture color with the vertex color in the fragment shader to mix both color :  
+```
+FragColor = texture(ourTexture, TexCoord) * vec4(ourColor, 1.0);
+```
 
+## Texture Units
+1. You probably wondered why the sampler2D variable is a uniform if we didn't even assign it some value with  
+glUniform. Using glUniform1i we can actually assign a location value to the texture sampler so we can set  
+multiple textures at once in a fragment shader. This location of a texture is more commonly known as a texture  
+unit.  
+2. The defalut texture unit for a texture is 0 which is the default active texture unit so we didn't need to  
+assign a location in the previous section; Note that not all graphics drivers assign a default texture unit  
+so the previous section may not have rendered for you.  
+3. The main purpose of texture units is to allow us to use more than 1 texture in our shaders. By assigning  
+texture units to the samplers, we can bind to multiple textures at once as long as we activate the corresponding  
+texture unit first. Just like glBindTexture we can  activate texture units using glActiveTexture passing in  
+the texture unit we'd like to use :  
+```
+glActiveTexture(GL_TEXTURE0); // activate the texture unit first before binding texture
+glBindTexture(GL_TEXTURE_2D, texture);
+```
+After activating a texture unit, a subsequent glBindTexture call will bind that texture to the currently active  
+texture unit. Texture unit GL_TEXTURE0 is always by default activated, so we didn't have to activate any texture  
+unit in the previous example when using glBindTexture.  
+4. *OpenGL should have a at least a minimum of 16 texture unitd for you to use which you can activate using  
+GL_TEXTURE0 to GL_TEXTURE15. They are defined in order so we could also get GL_TEXTURE8 via GL_TEXTURE0 + 8  
+for example, which is useful when we'd have to loop over several texture units.*  
+5. We still however need to edit the fragment shader to accept another sampler. This should be relatively  
+straightforward now :  
+```
+#version 330 core
+...
+
+uniform sampler2D texture1;
+uniform sampler2D texture2;
+
+void main()
+{
+    FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.2);
+}
+```
+The final output color is now the combination of two texture lookups. GLSL's built-in mix function takws two  
+values as input and linearly interpolates between them based on its third argument. If the third value is 0.0  
+it returns the first input; If it's 1.0 it returns the second input value. A value of 0.2 will return 80% of  
+thr first input color and 20% of the second input color, resulting in a mixture of both our textures.  
+6. We now want to load and create another texture; You should be familiar with the steps now.  
+Make sure to create another texture object, load the image and generate the final texture using glTexImage2D.  
+For the second texture we'll use an image of your [facial expression while learning OpenGL](
+https://learnopengl.com/img/textures/awesomeface.png) :  
+```
+unsigned char* data = stbi_load("awesomeface.png", &width, &height, &nrChannels, 0);
+if (data)
+{
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+}
+```
+Note that we now load a .png image that includes an alpha(transparency) channel. This means we now need  
+to specify that the image data contains an alpha channel as well by using GL_RGBA; Otherwise OpenGL will  
+incorrectly interpret the image data.  
+7. To use the second texture(and the first texture) we'd have to change the rendering procedure a bit by  
+binding both textures to the corresponding texture unit :  
+```
+glActiveTexture(GL_TEXTURE0);
+glBindTexture(GL_TEXTURE_2D, texture1);
+glActiveTexture(GL_TEXTURE1);
+glBindTexture(GL_TEXTURE_2D, texture2);
+
+glBindVertexArray(VAO);
+glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+```
+8. We also have to tell OpenGL to which texture unit each shader sampler belongs to by setting each sampler  
+using glUniform1i. We only have to set this once, so we can do this before we enter the render loop :  
+```
+ourShader.use(); // don't forget to avtivate the shader before setting uniforms!
+glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 0);
+ourShader.setInt("texture2", 1);
+
+while(...)
+{
+    ...
+}
+```
+By setting the samplers via glUniform1i we make sure each uniform sampler corresponds to the proper texture unit.  
+9. You probably notice that the texture is flipped upside-down! This happens because OpenGL expects the 0.0  
+coordinate on the y-axis to be on the bottom side of the image, but the images usually have 0.0 at the top of  
+the y-axis. Luckily for us, stb_image.h can flip the y-axis during image loading by adding the following  
+statement before loading any image :  
+```
+stbi_set_flip_vertically_on_load(true);
+```
+
+## Exercises
+1. Make sure only the happy face looks in the other/reverse direction by changing the fragment shader.  
+2. Experiment with the different texture wrapping methods by specifying texture coordinates in the  
+range of 0.0f to 2.0f instead of 0.0f to 1.0f. See if you can display 4 smiley faces on a single  
+container image clamped at its edge. See if you can experiment with other wrapping methods as well.  
+3. Try to display only the center pixels of the texture image on the rectangle in such a way that  
+the individual pixels are getting visible by changing the texture coordinates. Try to set the texture  
+filtering method to GL_NEAREST to see the pixels more clearly.  
+4. Use a uniform variable as the mix function's third parameter to vary the amount the two textures  
+are visible. Use the up and down arrow keys to change how much the container or the smiley face is  
+visible.  
