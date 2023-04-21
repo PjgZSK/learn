@@ -115,5 +115,71 @@ set(GAME_HEADER ${ALL_INCLUDES})
 
 
 aux_source_directory(Classes GAME_SOURCE)
+
+set(GAME_RES_FOLDER
+    "${CMAKE_CURRENT_SOURCE_DIR}/Resources"
+   )
 ```
 2. commands  
+    * add_subdirectory  
+    * aux_source_directory  
+
+## Mark app complie info and libs info
+1. source : cocos2dx top level CMakeLists.txt  
+2. code  
+```
+# mark app complie info and libs info
+set(all_code_files
+    ${GAME_HEADER}
+    ${GAME_SOURCE}
+    )
+if(NOT ANDROID)
+    add_executable(${APP_NAME} ${all_code_files})
+else()
+    add_library(${APP_NAME} SHARED ${all_code_files})
+    add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos/platform/android ${ENGINE_BINARY_PATH}/cocos/platform)
+    target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
+	add_definitions(-DCOCOSSDK)
+endif()
+
+target_link_libraries(${APP_NAME} cocos2d)
+target_include_directories(${APP_NAME}
+        PRIVATE Classes
+        PRIVATE ${COCOS2DX_ROOT_PATH}/cocos/audio/include/
+)
+```
+3. command  
+    * add_executable  
+    * add_library  
+    * target_link_libraries  
+    * add_definitions  
+    * target_include_directories  
+
+## Check c++ standard and visual studio version  
+1. source : cocos2dx cocosConfigDefine.cmake  
+2. code  
+```
+# check c++ standard
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# check visual studio version
+ if(WINDOWS)
+    # not support other compile tools except MSVC for now
+    if(MSVC)
+        # Visual Studio 2015, MSVC_VERSION 1900      (v140 toolset)
+        # Visual Studio 2017, MSVC_VERSION 1910-1919 (v141 toolset)
+        if(${MSVC_VERSION} EQUAL 1900 OR ${MSVC_VERSION} GREATER 1900)
+            message(STATUS "using Windows MSVC generate cocos2d-x project, MSVC_VERSION:${MSVC_VERSION}")
+        else()
+            message(FATAL_ERROR "using Windows MSVC generate cocos2d-x project, MSVC_VERSION:${MSVC_VERSION} lower than needed")
+        endif()
+    else()
+        message(FATAL_ERROR "please using Windows MSVC compile cocos2d-x project, support other compile tools not yet")
+    endif()
+endif()
+```
+3. command  
+    * message  
