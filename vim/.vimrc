@@ -47,6 +47,7 @@ if has("win32") || has("win64")
     "set pythonthreehome="C:\Program Files\Python38"
     "set pythonhome='C:\Python27'
     set guifont=Consolas:h20
+    set shell=\"C:\Program\ Files\Git\git-bash\"
 else
     set guifont=Monaco:h18
 endif
@@ -135,6 +136,7 @@ function! DisableHighlight()
     endfunc
 
 "automatic insertion head
+autocmd BufNewFile,BufRead *.sh set filetype=sh 
 autocmd BufNewFile *.cpp,*.[ch],*.sh,*.java exec ":call SetTitle()"
 func SetTitle()
     if &filetype == 'sh'
