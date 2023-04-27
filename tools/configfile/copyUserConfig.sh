@@ -1,8 +1,8 @@
 #########################################################################
-# File Name: updateVimrc.sh
+# File Name: copyUserConfig.sh
 # Author: pjg
 # mail: 
-# Created Time: 2023/4/26 10:31:12
+# Created Time: 2023/4/27 16:07:29
 #########################################################################
 #!/bin/bash
 
@@ -10,16 +10,17 @@
 sys=$(uname -o)
 
 # set source file path
+srcFile=$1
 if test ${sys}=="Msys"
 then
-    srcFilePath=~/.vimrc
+    srcFilePath=~/$srcFile
 elif test ${sys}=="mac"
 then
-    srcFilePath=~/.vimrc
+    srcFilePath=~/$srcFile
 fi
 
 # set destination file path
-destFilePath=".vimrc"
+destFilePath=$1
 
 # function : process '-r' option
 function reserveSrcAndDest()
@@ -50,6 +51,5 @@ for para in "${@}"; do
     fi
 done
 
-echo ${srcFilePath}
-echo ${destFilePath}
+echo "copy $srcFilePath to $destFilePath..."
 cp ${srcFilePath} ${destFilePath} 
