@@ -4,4 +4,6 @@ include(cmake/GLLearnExternalConfig.cmake)
 
 set(libname "external")
 
-add_library(
+add_library(${libname} empty.cpp)
+
+
