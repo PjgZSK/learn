@@ -7,4 +7,11 @@
 #!/bin/bash
 
 echo "deploy .bashrc..."
+
+# set current work dir
+# tempPwd=`pwd`
+# current_work_dir=`pwd;`/`dirname $0`
+# cd $current_work_dir
+# echo $current_work_dir
+
 bash copyUserConfig.sh ".bashrc" -r 
