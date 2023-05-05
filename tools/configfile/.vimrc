@@ -137,6 +137,7 @@ function! DisableHighlight()
 
 "automatic insertion head
 autocmd BufNewFile,BufRead *.sh set filetype=sh 
+autocmd BufNewFile,BufRead *.h set filetype=cpp 
 autocmd BufNewFile *.cpp,*.[ch],*.sh,*.java exec ":call SetTitle()"
 func SetTitle()
     if &filetype == 'sh'
@@ -158,9 +159,12 @@ func SetTitle()
         call append(line(".")+5, "")
     endif
     if &filetype == 'cpp'
-        "call append(line(".")+6, "#include <iostream>")
-        "call append(line(".")+7, "using namespace std;")
-        "call append(line(".")+8, "")
+        if expand("%:e") == 'h'
+            let upperFileName = toupper(expand("%:t:r"))
+            call append(line(".")+6, "#ifndef __".upperFileName."_H__")
+            call append(line(".")+7, "#define __".upperFileName."_H__")
+            call append(line(".")+8, "#endif /*__".upperFileName."_H__*/")
+        endif
     endif
     if &filetype == 'c'
         call append(line(".")+6, "#include")
