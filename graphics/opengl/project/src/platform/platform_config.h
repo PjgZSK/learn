@@ -10,7 +10,7 @@
 
 #define PLATFORM_UNKNOW     0 
 #define PLATFORM_WIN32      1
-#define PLATFORM_MACOS      2
+#define PLATFORM_MAC        2
 #define PLATFORM_IOS        3
 
 #define TARGET_PLATFORM PLATFORM_UNKNOW

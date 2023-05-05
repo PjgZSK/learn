@@ -23,7 +23,7 @@
  endif()
 
 # set platform specific path
-set(_path_prefix ${CMAKE_CURRENT_SOURCE_DIR}/prebuilt/)
+set(_path_prefix ${CMAKE_CURRENT_SOURCE_DIR}/prebuild/)
 if(IOS)
     set(platform_name ios)
     set(platform_spec_path ios)

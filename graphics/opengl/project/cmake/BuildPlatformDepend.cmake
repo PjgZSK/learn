@@ -12,9 +12,11 @@ macro(depend)
 
             find_library(COCOA_LIBRARY Cocoa)
             find_library(OPENGL_LIBRARY OpenGL)
+            find_library(IOKIT_LIBRARY IOKit)
             list(APPEND PLATFORM_SPECIFIC_LIBS
                  ${COCOA_LIBRARY}
                  ${OPENGL_LIBRARY}
+                 ${IOKIT_LIBRARY}
                  )
         endif()
     endif()

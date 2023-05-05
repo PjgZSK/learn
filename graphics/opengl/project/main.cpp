@@ -20,7 +20,9 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-#if TARGET_PLATFORM == PLATFORM_MACOS
+//    std::cout << "platform_value:" << TARGET_PLATFORM << std::endl;
+#if TARGET_PLATFORM == PLATFORM_MAC
+    std::cout << "PLATFORM::MACOS" << std::endl;
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); 
 #endif
 	// glfw window creation
