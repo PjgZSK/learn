@@ -33,7 +33,7 @@ means you didn't successfully link the GLFW library.
 We also tell GLFW we want to explicitly use the core-profile. Telling GLFW we want  
 to use the core-profile means we'll get access to a smaller subset of OpenGL features  
 without backwards-compatible features we no long need.  
-4. Note that on Max OS X you need to add  
+4. Note that on Mac OS X you need to add  
 ```
 glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 ```

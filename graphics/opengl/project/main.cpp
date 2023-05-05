@@ -4,6 +4,7 @@
 #include "src/shader.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "src/stb_image.h"
+#include "src/platform/platform_config.h"
 
 const float WindowWidth = 800.0f;
 const float WindowHeight = 600.0f;
@@ -19,6 +20,9 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+#if TARGET_PLATFORM == PLATFORM_MACOS
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); 
+#endif
 	// glfw window creation
 	GLFWwindow* window = glfwCreateWindow(WindowWidth, WindowHeight, "LearningOpenGL", NULL, NULL);
 	if (NULL == window)
