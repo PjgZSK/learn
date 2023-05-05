@@ -16,6 +16,8 @@ macro(depend)
                  ${COCOA_LIBRARY}
                  ${OPENGL_LIBRARY}
                  )
+        endif()
+    endif()
 endmacro()
 
 macro(use_libs_depend target)

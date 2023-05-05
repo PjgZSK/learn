@@ -1,5 +1,5 @@
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include <glfw3.h>
 #include <iostream>
 #include "src/shader.h"
 #define STB_IMAGE_IMPLEMENTATION

@@ -1,8 +1,8 @@
-cmake_minimum_requierd(VERSION 3.6)
+cmake_minimum_required(VERSION 3.6)
 
 set(ProjectName LearnOpenGL)
 
-project(${LearnOpenGL})
+project(${ProjectName})
 
 # set c++ standard
 set(CMAKE_CXX_STANDARD 17)
@@ -26,7 +26,7 @@ list(APPEND SOURCE_FILE
 add_executable(${ProjectName} ${SOURCE_FILE})
 
 # add extra include
-target_include_directories(${ProjectName}
+target_include_directories(${ProjectName} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/extralInclude)
 
 # use external library

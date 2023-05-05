@@ -1,5 +1,5 @@
 # add friendly paltform definition
-include(BuildPlatformDefine.cmake)
+include(BuildPlatformDefine)
 
 # add platform specific libraries depend macro
-include(BuildPlatformDepend.cmake)
+include(BuildPlatformDepend)
