@@ -33,8 +33,7 @@ function reserveSrcAndDest()
 # process all parameters
 for para in "${@}"; do
     idx=$(printf '%s\n' "$para" | awk '{ print(index($0, "-") - 1) }')
-    echo $idx
-    if [ $idx > 0 ] 
+    if [ $idx -gt 0 ] 
     then
         validPara=$(echo ${para:$idx})
         length=`echo ${#validPara}`

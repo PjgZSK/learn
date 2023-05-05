@@ -50,6 +50,7 @@ if has("win32") || has("win64")
     set shell=\"C:\Program\ Files\Git\git-bash\"
 else
     set guifont=Monaco:h18
+    set shell=/bin/zsh
 endif
 
 "clipboard
