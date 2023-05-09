@@ -17,13 +17,18 @@ include(cmake/BuildSet.cmake)
 # set src
 aux_source_directory(src SOURCE_FILE)
 
+# set header
+file(GLOB_RECURSE HEADER_FILE "src/*.h" "src/*.hpp")
+
+message(STATUS "header files:" ${HEADER_FILE})
+
 # add main.cpp
 list(APPEND SOURCE_FILE 
     main.cpp
     )
 
 # add source file
-add_executable(${ProjectName} ${SOURCE_FILE})
+add_executable(${ProjectName} ${SOURCE_FILE} ${HEADER_FILE})
 
 # add extra include
 target_include_directories(${ProjectName} PUBLIC
