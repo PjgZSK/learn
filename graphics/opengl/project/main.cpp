@@ -3,10 +3,11 @@
 #include <windows.h>
 #include <tchar.h>
 #include <iostream>
-#include "src/shader.h"
+#include "src/shader/shader.h"
 #define STB_IMAGE_IMPLEMENTATION
-#include "src/stb_image.h"
+#include "src/stb/stb_image.h"
 #include "src/platform/platform_config.h"
+#include "src/platform/platform_define.h"
 
 const float WindowWidth = 800.0f;
 const float WindowHeight = 600.0f;
@@ -14,10 +15,7 @@ const float WindowHeight = 600.0f;
 float mixValue = 0.0f;
 void processInput(GLFWwindow* window);
 
-int WINAPI _tWinMain(HINSTANCE hInstance,
-	HINSTANCE hPrevInstance,
-	LPTSTR    lpCmdLine,
-	int       nCmdShow)
+int main()
 {
 	// glfw : initialize and configure
 	glfwInit();
@@ -26,14 +24,13 @@ int WINAPI _tWinMain(HINSTANCE hInstance,
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 #if TARGET_PLATFORM == PLATFORM_MAC
-    std::cout << "PLATFORM::MACOS" << std::endl;
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); 
 #endif
 	// glfw window creation
 	GLFWwindow* window = glfwCreateWindow(WindowWidth, WindowHeight, "LearningOpenGL", NULL, NULL);
 	if (NULL == window)
 	{
-		std::cout << "Failed to initialize GLFW" << std::endl;
+		log("Failed to initialize GLFW");
 		glfwTerminate();
 		return -1;
 	}
@@ -45,7 +42,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance,
 	// glad : load all opengl function pointers
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
+		log("Failed to initialize GLAD");
 		return -1;
 	}
 
@@ -101,7 +98,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance,
 	}
 	else
 	{
-		std::cout << "ERROR::TEXTURE::FAILED_LOADING_IMAGE : container.jpg" << std::endl;
+		log("ERROR::TEXTURE::FAILED_LOADING_IMAGE : container.jpg");
 	}
 	stbi_image_free(data);
 	
@@ -121,7 +118,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance,
 	}
 	else
 	{
-		std::cout << "ERROR::TEXTURE::FAILED_LOADING_IMAGE : awesomeface.png" << std::endl;
+		log("ERROR::TEXTURE::FAILED_LOADING_IMAGE : awesomeface.png");
 	}
 	stbi_image_free(data);
 
