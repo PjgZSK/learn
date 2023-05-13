@@ -20,12 +20,4 @@
 #define main() main()
 #endif
 
-#if TARGET_PLATFORM == PLATFORM_WIN32
-#include <windows.h>
-#define log(s) OutputDebugString(s)
-#else
-#define log(s) std::cout << s << std::endl;
-#endif
-
-
 #endif /*__PLATFORM_DEFINE_H__*/

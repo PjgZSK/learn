@@ -1,13 +1,12 @@
 #include <glad/glad.h>
 #include <glfw3.h>
-#include <windows.h>
-#include <tchar.h>
 #include <iostream>
 #include "src/shader/shader.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "src/stb/stb_image.h"
 #include "src/platform/platform_config.h"
-#include "src/platform/platform_define.h"
+#include "src/platform/platform_macro.h"
+#include "src/log/log.h"
 
 const float WindowWidth = 800.0f;
 const float WindowHeight = 600.0f;
@@ -123,7 +122,7 @@ int main()
 	stbi_image_free(data);
 
 	// compile and link shader
-	Shader shader("resource/shader.vs", "resource/shader.fs");
+	Shader shader("shader/shader.vs", "shader/shader.fs");
 	shader.use();
 	shader.setInt("texture1", 0);
 	shader.setInt("texture2", 1);

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.17)
 
 set(ProjectName LearnOpenGL)
 
@@ -26,19 +26,37 @@ list(APPEND SOURCE_FILE
     main.cpp
     )
 
-# add shader file
-set(SHADER_FILE)
-list(APPEND SHADER_FILE
-    shader/shader.fs
-    shader/shader.vs
+# add resource
+set(GAME_RES_FOLDER
+    "${CMAKE_CURRENT_SOURCE_DIR}/resource"
     )
-# log source file, head file and shader file
+set(GAME_SHADER_FOLDER
+    "${CMAKE_CURRENT_SOURCE_DIR}/shader"
+    )
+file(GLOB_RECURSE SHADER_FILE RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "shader/*")
+file(GLOB_RECURSE RESOURCE_FILE RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "resource/*")
+
+# log source file, head file resource file and shader file
 message(STATUS "SOURCE FILE: " ${SOURCE_FILE})
 message(STATUS "HEAD FILE: " ${HEAD_FILE})
+message(STATUS "RESOURCE FILE: " ${RESOURCE_FILE})
 message(STATUS "SHADER FILE: " ${SHADER_FILE})
 
 # add source file
-add_executable(${ProjectName} ${SOURCE_FILE} ${HEAD_FILE} ${SHADER_FILE})
+add_executable(${ProjectName} ${SOURCE_FILE} ${HEAD_FILE} ${RESOURCE_FILE} ${SHADER_FILE})
+
+# set work directory
+set_target_properties(${ProjectName} PROPERTIES 
+    VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    XCODE_GENERATE_SCHEME TRUE
+    XCODE_SCHEME_WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+
+# apple mark resource
+if(APPLE)
+    set_target_properties(${ProjectName} PROPERTIES
+        RESOURCE "${RESOURCE_FILES}")
+endif()
 
 # add source group
 set(ALL_SOURCE_FILE ${SOURCE_FILE} ${HEAD_FILE} ${SHADER_FILE})
@@ -63,31 +81,11 @@ target_link_libraries(${ProjectName} external)
 # use all platform related libraries
 use_libs_depend(${ProjectName})
 
-# add resource
-set(GAME_RES_FOLDER
-    "${CMAKE_CURRENT_SOURCE_DIR}/resource"
-    )
-if(APPLE)
-    set(RESOURCE_FILES)
-    file(GLOB_RECURSE folder_files "${GAME_RES_FOLDER}/*")
-    foreach(res_file ${folder_files})
-        list(APPEND RESOURCE_FILES
-            ${res_file}
-            )
-    endforeach()
-   set_target_properties(${ProjectName} PROPERTIES
-        RESOURCE ${RESOURCE_FILES})
-endif()
-
-if(LINUX OR WINDOWS)
-    set(APP_RES_DIR ${CMAKE_CURRENT_BINARY_DIR}/resource)
-    copy_target_res(${ProjectName} COPY_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
-endif()
-
+# set ide properties
 if(APPLE)
     # output macOS/iOS .app
     set_target_properties(${ProjectName} PROPERTIES MACOSX_BUNDLE 1)
 elseif(MSVC)
     # visual studio default is Console app, but we need Windows app
     set_property(TARGET ${ProjectName} APPEND PROPERTY LINK_FLAGS "/SUBSYSTEM:WINDOWS")
- endif()
+endif()

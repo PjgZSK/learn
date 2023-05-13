@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "src/platform/platform_define.h"
+#include "src/log/log.h"
 
 Shader::Shader(const std::string & vertexShaderPath, const std::string & fragmentShaderPath)
 {
@@ -32,6 +32,7 @@ Shader::Shader(const std::string & vertexShaderPath, const std::string & fragmen
 	catch (std::ifstream::failure e)
 	{
 		log("ERROR::SHDER::FILE_NOT_SUCCESSFULLY_READ\n");
+        return;
 	}
 	const char* vShaderCode = vertexCode.c_str();
 	const char* fShaderCode = fragmentCode.c_str();

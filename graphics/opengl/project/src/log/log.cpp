@@ -10,7 +10,9 @@
 #include <new>
 #include <algorithm>
 #include "src/platform/platform_config.h"
-#include <windows.h>
+#if TARGET_PLATFORM == PLATFORM_WIN32
+#include <Windows.h>
+#endif
 
 void log(const char * format, ...)
 {
