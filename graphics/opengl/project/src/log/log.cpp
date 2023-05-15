@@ -6,12 +6,11 @@
  ************************************************************************/
 #include "log.h"
 #include <stdio.h>
-#include <stdarg.h>
 #include <new>
 #include <algorithm>
 #include "src/platform/platform_config.h"
 #if TARGET_PLATFORM == PLATFORM_WIN32
-#include <Windows.h>
+#include <windows.h>
 #endif
 
 void log(const char * format, ...)
@@ -64,11 +63,11 @@ void log(const char * format, ...)
 
     int pos = 0;
     int len = nret;
-    char* tempBuf[MAX_LOG_LENGTH + 1] = { 0 };
+    char tempBuf[MAX_LOG_LENGTH + 1] = { 0 };
 
     do
     {
-        int dataSize = std::min(MAX_LOG_LENGTH, len - pos);
+        int dataSize = min(MAX_LOG_LENGTH, len - pos);
         std::copy(buf + pos, buf + pos + dataSize, tempBuf);
 
 		tempBuf[dataSize] = 0;

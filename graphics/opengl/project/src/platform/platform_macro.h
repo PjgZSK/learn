@@ -12,10 +12,13 @@
 #include "platform_config.h"
 
 #if TARGET_PLATFORM == PLATFORM_WIN32
-#define main() WINAPI _tWinMain(HINSTANCE hInstance, \
+#include <windows.h>
+#include <tchar.h>
+#define main() WINAPI \
+				_tWinMain(HINSTANCE hInstance, \
                        HINSTANCE hPrevInstance, \
                        LPTSTR    lpCmdLine, \
-                       int       nCmdShow)
+                       int       nCmdShow) 
 #else
 #define main() main()
 #endif
