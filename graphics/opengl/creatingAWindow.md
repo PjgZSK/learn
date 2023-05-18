@@ -1,3 +1,18 @@
+
+<!-- vim-markdown-toc GFM -->
+
+* [Creating a window](#creating-a-window)
+    * [GLFW](#glfw)
+        * [Building GLFW](#building-glfw)
+            * [CMake](#cmake)
+            * [Compilation](#compilation)
+        * [Our first project](#our-first-project)
+        * [Linking](#linking)
+        * [GLAD](#glad)
+            * [Setting up GLAD](#setting-up-glad)
+    * [Additional resources](#additional-resources)
+
+<!-- vim-markdown-toc -->
 # Creating a window  
 1. The first thing we need to do before we start creating stunning graphics is to create an OpenGL context  
 and an application window to draw in.  
@@ -23,14 +38,14 @@ binaries available. So let's download Source packege.
 For use source packege, we are only interested in a few items :  
     * The resulting libraries from compilation.  
     * The include folder.  
-3. Compiling the library from the source code guarantees that the resulting library is perfectly tailored  
-for your CPU/OS, a luxury pre-compiled binaries don't always provide(sometimes, pre-compiled binaries  
-are not available for your system).  
-4. The problem with providing source code to the open world however is that not every one use the same  
-IDE or building system for developing their application, which means the project/solution files provided  
-may not be compatible for other people's setup. So people have to setup their project/solution with  
-the given .c/.cpp and .h/.hpp files, which is cumbersome.  
-5. Exactly for those reasons there is a tool called CMake.  
+        3. Compiling the library from the source code guarantees that the resulting library is perfectly tailored  
+        for your CPU/OS, a luxury pre-compiled binaries don't always provide(sometimes, pre-compiled binaries  
+        are not available for your system).  
+        4. The problem with providing source code to the open world however is that not every one use the same  
+        IDE or building system for developing their application, which means the project/solution files provided  
+        may not be compatible for other people's setup. So people have to setup their project/solution with  
+        the given .c/.cpp and .h/.hpp files, which is cumbersome.  
+        5. Exactly for those reasons there is a tool called CMake.  
 
 #### CMake
 1. CMake is a tool that can generate project/solution files of the user's choice(e.g. Visual Studio,  
@@ -53,18 +68,18 @@ the solution so it compiles to the target library.
 2. Once we generated our library we need to make sure the IDE knows where to find the library and the  
 include files for our OpenGL program.  
 3. There are two common approches in doing this :  
-    1. We find the /lib and /include folders of the IDE/compiler and add the content of GLFW's /include   
-    folder to the IDE's /include folder ans similarly add glfw3.lib to the IDE's /lib folder. This works,  
-    but it is not the recommanded approach. It's hard to track your library and include files and a new  
-    installation of your IDE/compiler results in you have to do this all over again.  
-    2. Another approach(and recommend) is to create a new set of directories at a location of your choice  
-    that contains all the header files/libraries form third party libraries from to which you can refer to  
-    from your IDE/compiler. The requirement is, however, each time we create a new project we have to tell  
-    the IDE where to find those directories.  
+1. We find the /lib and /include folders of the IDE/compiler and add the content of GLFW's /include   
+folder to the IDE's /include folder ans similarly add glfw3.lib to the IDE's /lib folder. This works,  
+but it is not the recommanded approach. It's hard to track your library and include files and a new  
+installation of your IDE/compiler results in you have to do this all over again.  
+2. Another approach(and recommend) is to create a new set of directories at a location of your choice  
+that contains all the header files/libraries form third party libraries from to which you can refer to  
+from your IDE/compiler. The requirement is, however, each time we create a new project we have to tell  
+the IDE where to find those directories.  
 
 ### Our first project  
 1. We use Visual Studio.  
-    Create a C++ empty project.  
+Create a C++ empty project.  
 
 ### Linking  
 1. In order for the project to use GLFW we need to link the library with our project. This can be done by  
@@ -74,16 +89,16 @@ to our project first.
 2. Visual Studio  
     * Add your directories to *include directories* and *library directories*.  
     * Add glfw3.lib and opengl32.lib to the *additianal dependencies*.  
-3. OpenGL library on Windows : opengl32.lib(comes with Microsoft SDK, which is installed by default when  
-you install Visual Studio).  
-4. OpenGL library on Linux : libGL.so(linked by adding -lGL to your linker settings).  
-If you can't find the library you probably need to install any of the Mesa, NVidia or AMD dev packages.  
-5. Test  
-Once you had added both the GLFW and OpenGL library to the linker settings you can include the header  
-files for GLFW as follows :  
-```
-#include <GLFW/glfw3.h>
-```
+        3. OpenGL library on Windows : opengl32.lib(comes with Microsoft SDK, which is installed by default when  
+        you install Visual Studio).  
+        4. OpenGL library on Linux : libGL.so(linked by adding -lGL to your linker settings).  
+        If you can't find the library you probably need to install any of the Mesa, NVidia or AMD dev packages.  
+        5. Test  
+        Once you had added both the GLFW and OpenGL library to the linker settings you can include the header  
+        files for GLFW as follows :  
+        ```
+        #include <GLFW/glfw3.h>
+        ```
 
 ### GLAD
 1. Because OpenGL is really a standard/specification it is up to the driver manufacturer to implement  
