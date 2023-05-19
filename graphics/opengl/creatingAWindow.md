@@ -123,6 +123,7 @@ extensions(for now) and click Generate to produce the resulting library files.
 4. GLAD by now should have provided you a zip file containing two include files, and s single glad.c file.  
 Copy both include folders(glad ans KHR) into your include(s) directoy(or add an extra item pointing to  
 these folders), and add the glad.c file to your project.  
+
 5. Test  
 ```
 #include <glad/glad.h>

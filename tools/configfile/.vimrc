@@ -31,12 +31,6 @@ set textwidth=500
 set laststatus=2
 set ruler
 
-"color
-set t_Co=256
-syntax enable
-set background=dark
-colorscheme solarized
-
 "system
 if has("win32") || has("win64")
     winpos 50 50
@@ -52,6 +46,8 @@ if has("win32") || has("win64")
     command! MyPlugInstall  :set shell=cmd.exe shellcmdflag=/c noshellslash guioptions-=! <bar> noau PlugInstall
     " PlugClean
     command! MyPlugClean    :set shell=cmd.exe shellcmdflag=/c noshellslash guioptions-=! <bar> noau PlugClean
+    set encoding=utf-8   
+    set rop=type:directx,gamma:1.0,contrast:0.5,level:1,geom:1,renmode:4,taamode:1
 else
     set guifont=Monaco:h18
     set shell=/bin/zsh
@@ -101,14 +97,6 @@ func! CompileRunGcc()
         exec "!firefox %.html &"
     endif
 endfunc
-"C,C++的调试
-map <F8> :call Rungdb()<CR>
-func! Rungdb()
-    exec "w"
-    exec "!g++ % -std=c++11 -g -o %<"
-    exec "!gdb ./%<"
-endfunc
-
 
 "command line
 set wildmenu
@@ -175,18 +163,27 @@ autocmd BufNewFile * normal G
 
 "vim-plug
 call plug#begin()
+Plug 'altercation/vim-colors-solarized'
 Plug 'ervandew/supertab'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 Plug 'ycm-core/YouCompleteMe',{ 'for' : ['c', 'cpp'] }
-Plug 'preservim/nerdtree'
+Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'godlygeek/tabular' "必要插件，安装在vim-markdown前面
+Plug 'tpope/vim-fugitive'
 Plug 'plasticboy/vim-markdown'
 Plug 'mzlogin/vim-markdown-toc'
 Plug 'SirVer/ultisnips'
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+Plug 'vim-airline/vim-airline-themes'
 Plug 'vim-airline/vim-airline'
-Plug 'majutsushi/tagbar'
 call plug#end()
+
+"color
+set t_Co=256
+syntax enable
+set background=dark
+colorscheme solarized
 
 "markdowm
 set cocu=nc
@@ -210,34 +207,57 @@ let g:vmt_auto_update_on_save = 0
 let g:vim_markdown_math = 1
 
 " tag bar
+nmap <F8> :TagbarToggle<CR>
+let g:tagbar_autoclose = 1
+"设置tagber对于markdown的支持
+let g:tagbar_type_markdown = {
+  \ 'ctagstype'	: 'markdown',
+  \ 'kinds'		: [
+    \ 'c:chapter:0:1',
+    \ 's:section:0:1',
+    \ 'S:subsection:0:1',
+    \ 't:subsubsection:0:1',
+    \ 'T:l4subsection:0:1',
+    \ 'u:l5subsection:0:1',
+  \ ],
+  \ 'sro'			: '""',
+  \ 'kind2scope'	: {
+    \ 'c' : 'chapter',
+    \ 's' : 'section',
+    \ 'S' : 'subsection',
+    \ 't' : 'subsubsection',
+    \ 'T' : 'l4subsection',
+  \ },
+  \ 'scope2kind'	: {
+    \ 'chapter' : 'c',
+    \ 'section' : 's',
+    \ 'subsection' : 'S',
+    \ 'subsubsection' : 't',
+    \ 'l4subsection' : 'T',
+  \ },
+\ }
+" air line
+let g:airline_extensions = ['branch', 'tagbar']
 "不显示文档总字数
 let g:airline#extensions#wordcount#enabled = 0
 "不显示文件编码（Windows系统）
 let g:airline#parts#ffenc#skip_expected_string='utf-8[dos]'
-"设置tagber对于markdown的支持
-let g:tagbar_type_markdown = {
-    \ 'ctagstype' : 'markdown',
-    \ 'kinds' : [
-        \ 'h:Chapter',
-        \ 'i:Section',
-        \ 'k:Paragraph',
-        \ 'j:Subparagraph'
-    \ ]
-\ }
 "取消显示warning部分
 let g:airline_section_warning = ''
+"let g:airline_section_c = airline#section#create(['filetype', 'file'])
+"let g:airline_section_x = '' 
 "取消显示section_b
-let g:airline_section_b = ''
+"let g:airline_section_b = ''
 "section_c显示为tagbar检索出来的标题
-let g:airline_section_c = airline#section#create(['tagbar'])
+"let g:airline_section_c = airline#section#create(['tagbar'])
 "section_x显示文件名
-let g:airline_section_x = '%{expand("%")}'
+"let g:airline_section_x = '%{expand("%")}'
 "section_y显示时间
-let g:airline_section_y = airline#section#create(['%{strftime("%D")}'])
+"let g:airline_section_y = airline#section#create(['%{strftime("%D")}'])
 "section_z显示日期
-let g:airline_section_z = airline#section#create(['%{strftime("%H:%M")}'])
+"let g:airline_section_z = airline#section#create(['%{strftime("%H:%M")}'])
 "激活tagbar扩展
-let g:airline#extensions#tagbar#enabled = 1
+"let g:airline#extensions#tagbar#enabled = 1
 
 "nerdtree
 nnoremap <leader>n :NERDTreeFocus<CR>
