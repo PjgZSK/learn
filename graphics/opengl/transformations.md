@@ -17,4 +17,30 @@ z
 - Vector can have any dimensions.  
 ### 1.2.2 Vector operations
 #### 1.2.2.1 Scalar vector
-- We can use 
+- We can use $+,-,\times and \div$ to do scalar operation.  
+$$
+\begin{pmatrix}
+1 \\
+2 \\
+3
+\end{pmatrix}
++ x \to
+\begin{pmatrix}
+1 \\
+2 \\
+3
+\end{pmatrix}
++
+\begin{pmatrix}
+x \\
+x \\
+x
+\end{pmatrix}
+= 
+\begin{pmatrix}
+1 + x \\
+2 + x \\
+3 + x
+\end{pmatrix}
+$$
+
