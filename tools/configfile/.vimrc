@@ -177,6 +177,7 @@ Plug 'SirVer/ultisnips'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'vim-airline/vim-airline-themes'
 Plug 'vim-airline/vim-airline'
+
 call plug#end()
 
 "color
@@ -194,13 +195,13 @@ let g:vim_markdown_folding_style_pythonic = 1
 let g:vim_markdown_folding_level = 1
 "let g:vim_markdown_folding_disabled = 1
 "设置tab键为触发键
-let g:UltiSnipsExpandTrigger = '<tab>'
+"let g:UltiSnipsExpandTrigger = '<>'
 "设置向后跳转键
-let g:UltiSnipsJumpForwardTrigger = '<tab>' 
+"let g:UltiSnipsJumpForwardTrigger = '<tab>' 
 "设置向前跳转键
-let g:UltiSnipsJumpBackwardTrigger = '<S-tab>' 
+"let g:UltiSnipsJumpBackwardTrigger = '<S-tab>' 
 "设置文件目录
-let g:UltiSnipsSnippetDirectories=["path/of/snippetDirectories"]
+let g:UltiSnipsSnippetDirectories=["~/.vim/UltiSnips"]
 "设置打开配置文件时为垂直打开
 let g:UltiSnipsEditSplit="vertical"
 let g:vmt_auto_update_on_save = 0
