@@ -21,7 +21,12 @@
     only show commits that introduced a change to those files   
 * -p  
     show the patch introdeced with each commit  
-
+* --name-only  
+    list changed file name.  
+* --numstat  
+    list file name, the number of add line and the number of delete line for each changed file.   
+* --shortstat  
+    list the number of changed file, the number of add line, and the number of delete line in total.  
 only show commits adding or removing code matching the string  
 //只会显示那些 增加或移除了 和指定字符串相匹配的 代码的 提交
   
