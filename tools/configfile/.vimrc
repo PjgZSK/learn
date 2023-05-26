@@ -173,6 +173,7 @@ Plug 'godlygeek/tabular' "必要插件，安装在vim-markdown前面
 Plug 'tpope/vim-fugitive'
 Plug 'plasticboy/vim-markdown'
 Plug 'mzlogin/vim-markdown-toc'
+Plug 'reconquest/vim-pythonx' " vim python functions for snips 
 Plug 'SirVer/ultisnips'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'vim-airline/vim-airline-themes'
@@ -197,11 +198,11 @@ let g:vim_markdown_folding_level = 1
 "let g:vim_markdown_toc_autofit = 1
 "let g:vim_markdown_folding_disabled = 1
 "设置tab键为触发键
-"let g:UltiSnipsExpandTrigger = '<>'
+let g:UltiSnipsExpandTrigger = '<tab>'
 "设置向后跳转键
-"let g:UltiSnipsJumpForwardTrigger = '<tab>' 
+let g:UltiSnipsJumpForwardTrigger = '<tab>' 
 "设置向前跳转键
-"let g:UltiSnipsJumpBackwardTrigger = '<S-tab>' 
+let g:UltiSnipsJumpBackwardTrigger = '<S-tab>' 
 "设置文件目录
 let g:UltiSnipsSnippetDirectories=["~/.vim/UltiSnips"]
 "设置打开配置文件时为垂直打开
