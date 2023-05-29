@@ -52,4 +52,4 @@ for para in "${@}"; do
 done
 
 echo "copy $srcFilePath to $destFilePath..."
-cp ${srcFilePath} ${destFilePath} 
+cp -r ${srcFilePath} ${destFilePath} 

@@ -50,7 +50,7 @@ if has("win32") || has("win64")
     set encoding=utf-8   
     set rop=type:directx,gamma:1.0,contrast:0.5,level:1,geom:1,renmode:4,taamode:1
 else
-    set guifont=Monaco:h18
+    set guifont=Monaco:h20
     set shell=/bin/zsh
 endif
 

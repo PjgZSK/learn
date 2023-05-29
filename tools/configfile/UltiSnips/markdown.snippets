@@ -72,6 +72,7 @@ while i > 0:
 snip.rv = stripped[0:i] + "\\frac{" + stripped[i+1:-1] + "}"
 `{$1}$0
 endsnippet
+priority 0
 
 # matrix
 global !p
@@ -132,20 +133,15 @@ endsnippet
 
 # smart mk
 global !p
-def create_smart_mk_snip(arg)
-	snip = ''
-	if arg == 'co':
-		snip = '{\color{${1:Salmon}}$2}$0'
-	elif arg == 'cos':
-		snip = ''
-	return snip
+import px.snippets
 endglobal
-#post_jump "create_matrix_placeholders(snip)"
-snippet 'mk(co|cos|cofg|cosg)' "Smart mk" wr
-`!p
-snip.rv = '$' + match.group(1) + '$'
-`
+
+priority 1
+post_jump "px.snippets.expand(snip)"
+snippet 'mk(co|cos|cofg|cosg|v[a-zA-Z]|h[a-zA-Z]|b[a-zA-Z])' "Smart mk" wr
+$`!p snip.rv = match.group(1)`$1$
 endsnippet
+priority 0
 
 # color
 snippet co "color" w
@@ -165,17 +161,15 @@ snippet cosg "sea green color" w
 endsnippet
 
 # over 
-snippet '(mk)?v([a-zA-Z])' "Vec" wr
-`!p 
-inline = '$' if match.group(1) else ''
-snip.rv = inline`\vec `!p snip.rv = match.group(2) + inline`
+snippet 'v([a-zA-Z])' "Vec" r
+\vec `!p snip.rv = match.group(1)`
 endsnippet
 
-snippet 'h([a-zA-Z])' "Hat" wr
+snippet 'h([a-zA-Z])' "Hat" r
 \hat `!p snip.rv = match.group(1)`
 endsnippet
 
-snippet 'b([a-zA-Z])' "Bar" wr
+snippet 'b([a-zA-Z])' "Bar" r
 \bar `!p snip.rv = match.group(1)`
 endsnippet
 
