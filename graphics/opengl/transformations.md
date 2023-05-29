@@ -23,24 +23,86 @@ $$
 1 \\
 2 \\
 3
-\end{pmatrix}
-+ x \to
+\end{pmatrix} + x \to
 \begin{pmatrix}
 1 \\
 2 \\
 3
-\end{pmatrix}
-+
+\end{pmatrix} +
 \begin{pmatrix}
 x \\
 x \\
 x
-\end{pmatrix}
-= 
+\end{pmatrix} = 
 \begin{pmatrix}
 1 + x \\
 2 + x \\
 3 + x
 \end{pmatrix}
 $$
-
+- vector negative  
+$$
+-\vec v = - 
+\begin{pmatrix}
+   v_x  \\
+    v_y \\
+    v_z \\
+\end{pmatrix} = 
+\begin{pmatrix}
+   -v_x  \\
+    -v_y \\
+    -v_z \\
+\end{pmatrix}
+$$
+#### 1.2.2.2 Addition and subtraction
+- The addition or subtraction with two vectors just add or sub their corresponding  
+components, but in coordinate aspect, this is a operation which process two line and  
+produce a new line.  
+- Scalar aspect  
+$$
+\vec v = \begin{pmatrix}
+   1  \\
+    2 \\
+    3 \\
+\end{pmatrix}, \vec k = \begin{pmatrix}
+    4 \\
+    5 \\
+    6 \\
+\end{pmatrix} \to \vec v + \vec k = \begin{pmatrix}
+    1 + 4 \\
+    2 + 5 \\
+    3 + 6 \\
+\end{pmatrix} = \begin{pmatrix}
+    5 \\
+    7 \\
+    9 \\
+\end{pmatrix}
+$$
+- Coordinate aspect  
+![vectorAdd](markdownImgs/vectorAdd.png)
+- Subtraction is similar with add.  
+![vectorSub](markdownImgs/vectorSub.png)
+#### 1.2.2.3 Length
+- The length/magnitude of vector is calculated with ${\color{Salmon}Pythagoras \ theorem}$  
+- Scalar aspect  
+$$
+\vec v = \begin{pmatrix}
+    x \\
+    y \\
+\end{pmatrix}, \  
+\begin{Vmatrix}
+    \vec v \\
+\end{Vmatrix} = \sqrt{x^2 + y^2} $$
+- Coordinate aspect  
+![vectorLen](markdownImgs/vectorLen.png)
+- ${\color{ForestGreen}unit \ vector}$  
+$$
+\hat v = \frac{\vec v}{\begin{Vmatrix}
+    \vec v \\
+\end{Vmatrix}}  
+$$
+We call this ${\color{ForestGreen}normalizing}$ a vector.  
+#### 1.2.2.4 Vector-vector multiplication
+- There are two multiplication with vector-vector which are $$
+##### 1.2.2.4.1 Dot product
+##### 1.2.2.4.2 Cross product

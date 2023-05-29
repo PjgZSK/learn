@@ -46,6 +46,7 @@ if has("win32") || has("win64")
     command! MyPlugInstall  :set shell=cmd.exe shellcmdflag=/c noshellslash guioptions-=! <bar> noau PlugInstall
     " PlugClean
     command! MyPlugClean    :set shell=cmd.exe shellcmdflag=/c noshellslash guioptions-=! <bar> noau PlugClean
+
     set encoding=utf-8   
     set rop=type:directx,gamma:1.0,contrast:0.5,level:1,geom:1,renmode:4,taamode:1
 else
@@ -178,9 +179,26 @@ Plug 'SirVer/ultisnips'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'vim-airline/vim-airline-themes'
 Plug 'vim-airline/vim-airline'
-
+Plug 'img-paste-devs/img-paste.vim'
 call plug#end()
 
+func CopyMarkDownPic()
+    if has("win32") || has("win64")
+        " markdown paste pic
+        set shell=cmd.exe shellcmdflag=/c noshellslash guioptions-=!
+        call mdip#MarkdownClipboardImage()
+        set shell=\"C:\Program\ Files\Git\git-bash\"
+    else
+        " markdown paste pic
+        call mdip#MarkdownClipboardImage()
+    endif
+endfunc
+
+" markdown paste pic
+autocmd FileType markdown nmap <buffer><silent> <C-p> :call CopyMarkDownPic()<CR>
+" there are some defaults for image directory and image name, you can change them
+let g:mdip_imgdir = 'markdownImgs'
+" let g:mdip_imgname = 'image'
 "color
 set t_Co=256
 syntax enable

@@ -122,6 +122,15 @@ $
         positive lookbehind assertion
 (?<!...)
         negative lookbehind assertion
+(?P<name>)
+        group name
+(?P=<name>)
+        call group named 'name'
 ```
 ## 3. Python Regular Object
-- to do...
+- match  
+```
+match.group(index)      get group result by group index(start with 1)
+match.group(name)       get group result by group name
+```
+

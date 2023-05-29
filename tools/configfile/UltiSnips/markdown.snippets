@@ -20,22 +20,57 @@ snippet box "Box"
 $0
 endsnippet
 
-# LaTex
-# inline and display mode
-snippet dm "Math" w
-$$
+# code scope
+snippet cs "Code Scope" w
+\`\`\`
 ${1:${VISUAL}}
-$$
-$0
+\`\`\`
 endsnippet
 
-snippet mk "Math" w
+# LaTex
+# inline and display mode
+snippet dm "Display mode" w
+$$
+${1:${VISUAL}}
+$$$0
+endsnippet
+
+snippet mk "inline mode" w
 $${1}$`!p
 if t[2] and t[2][0] not in [',', '.', '?', '-', ' ']:
     snip.rv = ' '
 else:
     snip.rv = ''
 `$2
+endsnippet
+
+# sqrt
+snippet 'sq([1-9a-zA-Z]*)' "sqrt" wr
+\sqrt`!p snip.rv = '[' + match.group(1) + ']' if match.group(1) != '' else ''`{$1}$0
+endsnippet
+
+# fraction
+snippet // "Fraction" i
+\\frac{$1}{$2}$0
+endsnippet
+
+snippet '((\d+)|(\d*)(\\)?([A-Za-z]+)((\^|_)(\{\d+\}|\d))*)/' "Fraction" wr
+\\frac{`!p snip.rv = match.group(1)`}{$1}$0
+endsnippet
+
+priority 1000
+snippet '^.*\)/' "() Fraction" wr
+`!p
+stripped = match.string[:-1]
+depth = 0
+i = len(stripped) - 1
+while i > 0:
+	if stripped[i] == ')': depth += 1
+	if stripped[i] == '(': depth -= 1
+	if depth == 0: break;
+	i -= 1
+snip.rv = stripped[0:i] + "\\frac{" + stripped[i+1:-1] + "}"
+`{$1}$0
 endsnippet
 
 # matrix
@@ -77,7 +112,7 @@ def create_matrix(cols, rows, sep, start, end):
 endglobal
 
 post_jump "create_matrix_placeholders(snip)"
-snippet '(\\?)([vVbBps]?)mat(\d+),(\d+)' "LeTax matrix" wr
+snippet '(\\?)([vVbBps]?)mat(?P<row>\d+)(,(?P<col>\d+))?' "LaTex matrix" wr
 `!p
 c = match.group(2)
 prefix = ""
@@ -90,10 +125,58 @@ start = "\\begin{" + c + "matrix}"
 end = "\\end{" + c + "matrix}"
 dm = "$$" if match.group(1) == "\\" else ""
 snip.rv = dm + prefix + start + "\n" + \
-	create_matrix(match.group(4), match.group(3), "&", "\t", "\\\\\\\\\n") + \
+	create_matrix(match.group('col') if match.group('col') else 0, match.group('row'), "&", "\t", "\\\\\\\\\n") + \
 	"\n" + end + postfix + dm
+`$0
+endsnippet
+
+# smart mk
+global !p
+def create_smart_mk_snip(arg)
+	snip = ''
+	if arg == 'co':
+		snip = '{\color{${1:Salmon}}$2}$0'
+	elif arg == 'cos':
+		snip = ''
+	return snip
+endglobal
+#post_jump "create_matrix_placeholders(snip)"
+snippet 'mk(co|cos|cofg|cosg)' "Smart mk" wr
+`!p
+snip.rv = '$' + match.group(1) + '$'
 `
-$0
+endsnippet
+
+# color
+snippet co "color" w
+{\color{${1:Salmon}}$2}$0
+endsnippet
+
+snippet cos "salmon color" w
+{\color{Salmon}$1}$0
+endsnippet
+
+snippet cofg "forest green color" w
+{\color{ForestGreen}$1}$0
+endsnippet
+
+snippet cosg "sea green color" w
+{\color{SeaGreen}$1}$0
+endsnippet
+
+# over 
+snippet '(mk)?v([a-zA-Z])' "Vec" wr
+`!p 
+inline = '$' if match.group(1) else ''
+snip.rv = inline`\vec `!p snip.rv = match.group(2) + inline`
+endsnippet
+
+snippet 'h([a-zA-Z])' "Hat" wr
+\hat `!p snip.rv = match.group(1)`
+endsnippet
+
+snippet 'b([a-zA-Z])' "Bar" wr
+\bar `!p snip.rv = match.group(1)`
 endsnippet
 
 # For Learn
