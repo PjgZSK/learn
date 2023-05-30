@@ -138,7 +138,7 @@ endglobal
 
 priority 1
 post_jump "px.snippets.expand(snip)"
-snippet 'mk(co|cos|cofg|cosg|v[a-zA-Z]|h[a-zA-Z]|b[a-zA-Z])' "Smart mk" wr
+snippet 'mk(co|cofg|cosg|cos|v[a-zA-Z]|h[a-zA-Z]|b[a-zA-Z])$' "Smart mk" wr
 $`!p snip.rv = match.group(1)`$1$
 endsnippet
 priority 0
@@ -149,15 +149,15 @@ snippet co "color" w
 endsnippet
 
 snippet cos "salmon color" w
-{\color{Salmon}$1}$0
+{\color{Salmon}$1}
 endsnippet
 
 snippet cofg "forest green color" w
-{\color{ForestGreen}$1}$0
+{\color{ForestGreen}$1}
 endsnippet
 
 snippet cosg "sea green color" w
-{\color{SeaGreen}$1}$0
+{\color{SeaGreen}$1}
 endsnippet
 
 # over 
