@@ -103,6 +103,8 @@ $$
 $$
 We call this ${\color{ForestGreen}normalizing}$ a vector.  
 #### 1.2.2.4 Vector-vector multiplication
-- There are two multiplication with vector-vector which are $$
+- There are two multiplication with vector-vector which are $\vec v \cdot \vec k$ called  
+    dot product and $\vec v \times \vec k$ called cross product.  
 ##### 1.2.2.4.1 Dot product
+
 ##### 1.2.2.4.2 Cross product
