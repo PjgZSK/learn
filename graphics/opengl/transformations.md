@@ -106,5 +106,27 @@ We call this ${\color{ForestGreen}normalizing}$ a vector.
 - There are two multiplication with vector-vector which are $\vec v \cdot \vec k$ called  
     dot product and $\vec v \times \vec k$ called cross product.  
 ##### 1.2.2.4.1 Dot product
-
+- Dot product is a scalar value, there are two aspect to calculate it.  
+- Coordinate aspect  
+$$
+\begin{pmatrix}
+    0.6 \\
+    -0.8 \\
+    0 \\
+\end{pmatrix} \cdot \begin{pmatrix}
+    0 \\
+    1 \\
+    0 \\
+\end{pmatrix} = (0.6 * 0) + (-0.8 * 1) + (0 * 0) = -0.8
+$$
+- Graphic aspect   
+$$
+\vec v \cdot \vec k = \begin{Vmatrix}
+    \vec v \\
+\end{Vmatrix} \cdot \begin{Vmatrix}
+    \vec k \\
+\end{Vmatrix} \cdot \cos \theta
+$$
+- This is an convenient approach to calculate angle between two line within   
+Coordinate system.  
 ##### 1.2.2.4.2 Cross product
