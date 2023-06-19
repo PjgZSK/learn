@@ -136,17 +136,22 @@ int main()
 		// render
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-
+		
+		// set gl data
+		// set uniform "percent" data
 		shader.setFloat("percent", mixValue);
-
+		// bind texture0 data
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);
+		// bind texture1 data
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, texture2);
-
+		// apply shader program
 		shader.use();
-
+		// bind vertex array data
 		glBindVertexArray(VAO);
+
+		// draw call
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		// swap frame buffer
