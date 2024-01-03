@@ -28,6 +28,15 @@
     protocol=https
     > [Press Return]
     ```  
+    2. Windows  
+    Using Git Credential Manager.  
+    GCM now only support Http(s) and installed with Git.  
+    Checking GCM:  
+    ```
+    git config --system --list | grep credential
+    ```
+    If output contains credential.helper=manager, then GCM is installed.  
+    GCM will ask authentication at first time with browser window.  
 5. About password  
     Since supporting for password authentication was removed on August 13 2021 in github,  
     you shoud use personal access key replace password.  
