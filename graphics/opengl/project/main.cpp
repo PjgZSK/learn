@@ -13,6 +13,7 @@ const float WindowHeight = 600.0f;
 
 float mixValue = 0.0f;
 void processInput(GLFWwindow* window);
+unsigned int loadTexture(const char* path);
 
 int main()
 {
@@ -58,20 +59,24 @@ int main()
 		1, 2, 3  // second triangle
 	};
 
-	// set vertex buffer object, element buffer object and vertex array object
+	// vetex array
 	unsigned int VAO;
-	unsigned int VBO, EBO;
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-	glGenVertexArrays(1, &VAO);
-	
+	glGenVertexArrays(1, &VAO);	
 	glBindVertexArray(VAO);
 	
+	// vertex buffer
+	unsigned int VBO;
+	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	// element buffer
+	unsigned int EBO;
+	glGenBuffers(1, &EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
+	// set vertex attribute array
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
@@ -80,46 +85,10 @@ int main()
 	glEnableVertexAttribArray(2);
 
 	// load texture1
-	unsigned int texture1;
-	glGenTextures(1, &texture1);
-	glBindTexture(GL_TEXTURE_2D, texture1);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	stbi_set_flip_vertically_on_load(true);
-	int width, height, nrChannels;
-	unsigned char* data = stbi_load("resource/container.jpg", &width, &height, &nrChannels, 0);
-	if (data)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		log("ERROR::TEXTURE::FAILED_LOADING_IMAGE : container.jpg");
-	}
-	stbi_image_free(data);
+	unsigned int texture1 = loadTexture("resource/container.jpg");
 	
 	// load texture2
-	unsigned int texture2;
-	glGenTextures(1, &texture2);
-	glBindTexture(GL_TEXTURE_2D, texture2);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	data = stbi_load("resource/awesomeface.png", &width, &height, &nrChannels, 0);
-	if (data)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		log("ERROR::TEXTURE::FAILED_LOADING_IMAGE : awesomeface.png");
-	}
-	stbi_image_free(data);
+	unsigned int texture2 = loadTexture("resource/awesomeface.png");
 
 	// compile and link shader
 	Shader shader("shader/shader.vs", "shader/shader.fs");
@@ -163,6 +132,33 @@ int main()
 
 	glfwTerminate();
 	return 0;
+}
+
+unsigned int loadTexture(const char* path)
+{
+	unsigned int texture = -1;
+	stbi_set_flip_vertically_on_load(true);
+	int width, height, nrChannels;
+	unsigned char* data = stbi_load(path, &width, &height, &nrChannels, 0);
+	if (data)
+	{		
+		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		unsigned l = strlen(path);
+		GLenum format = l > 3 && path[l - 4] == '.' && path[l - 3] == 'p' && path[l - 2] == 'n' && path[l - 1] == 'g' ? GL_RGBA : GL_RGB;
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		log("ERROR::TEXTURE::FAILED_LOADING_IMAGE : %s", path);
+	}
+	stbi_image_free(data);
+	return texture;
 }
 
 void processInput(GLFWwindow * window)
