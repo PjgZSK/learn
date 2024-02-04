@@ -1,0 +1,116 @@
+pipeline :
+	mc -> wc -> vc -> pc -> nc -> dc	
+
+addition:
+	particle
+
+terminology
+	normal / binormal
+	tangent / bitangent
+	normal map / bump map	
+	tangent space
+	
+mathematic
+	translation
+	rotation
+	coordination transform
+
+coordination transform
+	cos(a + b) = cos(a)cos(b) - sin(a)sin(b)
+	sin(a + b) = sin(a)cos(b) + cos(a)sin(b)
+
+	x, -y
+	y, x
+
+	u = (x, y)
+	v = (-y, x)
+
+rotation
+	2d rotation pivot is origin point
+	3d axis rotation transform 3d rotation into 2d rotation by removing rotation axis	
+
+Q
+	UnityObjectToWorldNormal
+	UnityObjectToWorldDir
+		the transformation of points
+		the transformation of directions
+		the transformation of surface normal vectors
+
+	Light
+	depth test
+	glm
+
+	color blend
+
+	humanoid avatar(unity)
+
+
+begin 
+loop
+end
+
+render state
+render command(draw call)
+
+stencil test
+	enable/disable stencil test
+	enable/disable stencil buffer write(write mask)
+	stencil function(func, ref, mask)
+	stencil option(sfail, dpfail, dppass)
+
+behavior - logic - state change
+
+stencil test - behavior(logic)
+stencil function - behavior(logic)
+	whether discard fragment(logic)
+
+high level logic
+low level logic
+
+compare(logic)
+	equal, greater, less, 
+	not equal : greater or less 
+	less equal : less or equal 
+	greater equal : greater or equal
+compare(state change)
+	connected(1)
+	not connected(0)	
+
+the single is simple, but the gather of singles is complicate
+
+control emotion 
+analyze
+verify
+
+focus is the greatest powerful ability
+
+uv
+	0 - 1
+projection space
+	-1 - 1
+fragment color
+	0 - 1
+
+texture
+	texture wrap
+	texture filter
+	mipmaps	
+
+direction
+	unity shaderlab
+	glsl
+
+cmake
+	basic
+		file	
+		add_library, add_executable
+	compile
+		target_include_directories
+		target_link_libraries
+		include_directories
+		find_library	
+	cmake build
+		add_subdirectory
+		include
+	ide
+		source_group
