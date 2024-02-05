@@ -83,6 +83,7 @@ analyze
 verify
 
 focus is the greatest powerful ability
+the source of focus is the spirit of the man
 focus
 	what to do
 	how to do
