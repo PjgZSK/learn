@@ -83,7 +83,11 @@ analyze
 verify
 
 focus is the greatest powerful ability
-
+focus
+	what to do
+	how to do
+	spend time
+	
 uv
 	0 - 1
 projection space
