@@ -1,0 +1,75 @@
+system error
+    SIGABRT
+        abort()
+        assert()
+        double-free
+        heap corruption
+    SIGSEGV
+        illegal memory read/write
+
+
+canvas group
+    how to integrate with editor
+        CustomEditor(typeof(CanvasGroup))
+        editor extend, inherited from Editor
+        OnInspectorGUI
+            Editor.target
+            EditorGUILayout.Space()
+            EditorGUILayout.LabelField("")
+            EditorGUILayout.Button("")
+    how to generate code
+        Directory.Exists("")
+            Directory.CreateDirectory("")
+        var writer = new StreamWriter("path/to/script")
+            var writtenStr = AssetDatabase.LoadAssetAtPath<TextAsset>("path/to/ScriptTemplate.cs").text
+            writer.Write(writtenStr)
+            writer.Close()
+        AssetDatabase.Refresh()
+    how to generate prefab
+        Directory.Exists("path")
+            Directory.CreateDirectory("path")
+        var obj = (Editor.target as CanvasGroup).GameObject
+        PrefabUtility.IsAnyPrefabInstanceRoot(obj)
+            PrefabUtility.UnpackPrefabInstance(obj, PrefabUnpackMode.OutermostRoot, InteractionMode.AutomatedAction)
+        PrefabUtility.SaveAsPrefabAssetAndConnect(obj, "path", InteractionMode.AutomatedAction) 
+
+line ending
+    dos/windows: "\r\n"
+    unix/mac osx: "\n"
+c# verbatim string literal
+    @"C:\Users\Rich" = "C:\\Users\\Rich"
+Regex
+    .   match 1 character
+    *   match 0 or more character
+    ?   match 0 or 1 character
+    +   match 1 or more character
+    ^   match the start of the string
+    $   match the end of the string 
+
+
+football
+    dive
+    penalty
+
+todo
+    navbar 
+        view
+            event
+                enter view
+                leave view
+        container
+            structure
+                element
+                
+
+
+undetermined
+    next match ui effect
+
+
+
+
+
+
+
+ 

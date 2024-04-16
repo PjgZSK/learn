@@ -1,0 +1,6 @@
+Windows Build
+1. mkdir build && cd build
+2. cmake .. -G "Visual Studio 17 2022" -A x64
+
+MacOS Build
+
