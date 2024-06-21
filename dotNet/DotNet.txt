@@ -1,0 +1,185 @@
+.Net    
+    an open-source developer platform
+    language(c#,F#, VB)
+
+
+.Net Introduction
+    high-performance runtime
+    automatic memory manager(garbage collector aka GC)
+    type-safe(compiler) and memory-safe(GC)
+    concurrency(async/await, Task)
+    a large set of libraries
+.Net Design Points
+    Productivity is full-stack
+    Safe code(unsafe code)
+    Static and dynamic code
+    Native code interop and hardware intrinsics
+    Code is portable across platforms
+    Adaptability across programming domains(cloud, client, gaming)
+    Industry standard
+.Net Components
+    Runtime - executes application code
+    Libraries - provides utility functionality like JSON parsing
+    Compiler - compiles C#(and other language) into (runtime) executable code
+    SDK and other tools - enable building and monitoring apps with modern workflows
+    App stacks - like ASP.NET Core and Windows Forms, that enable writing apps
+Summary
+    The runtime, libraries and languages are the pillars of the .Net stack.
+    Higher-level components, like .Net Tools, and app stacks, like ASP.NET Core, build on top of the pillars.
+    C# is primary programming language for .Net and much of .Net is written in C#
+
+C# Introduction
+    C# is object-oriented and the runtime supports object orientation.
+    C# requires garbage collection and the runtime provides a tracing garbage collector.
+    The libraries (and also the app stack) shape those capabilities into concepts and object models that enable 
+        developers to productively write algorithms in intuitive workflows.
+    
+    Asynchronous programming(async, await)
+    Type system, generic types
+    The .Net runtime provides automatic memory management via a garbage collector.
+    Value type and stack-allocated memory blocks offer more direct, lower-level control over data and 
+        native platform interop.
+    Reflection is a "programs as data" paradigm, allowing one part of a program to dynamically query 
+        and invoke another, in terms of assemblies, types, and members.
+    Exception is the primary error handling model in .Net.
+    App stack, like ASP.NET core and Windows Forms, are build on and take advantage of low-level libraries,
+        language and runtime. The app stack define the way that the app are constructed and the lifecycle
+        of execution.
+    The SDK and other tools enable a modern developer experience. The modern developer experience includes
+        being able to build, analyze and test code.
+    NuGet is the package manager for .Net.
+
+.Net Standard(API specification)
+    a formal specification of .Net APIs
+    Additive, Immutable
+    modern version : 2.0 and 2.1
+    netstandard2.0: .NET Framework and all other implementations of .Net
+    netstandard2.1: Mono, Xamarin, .NET Core 3.x 
+    
+    ref: https://github.com/dotnet/standard/tree/v2.1.0/src/netstandard/ref
+    doc: https://github.com/dotnet/standard/tree/v2.1.0/docs/versions
+
+.Net Implement(sdk : runtime and class libraries) 
+    .NET Framework
+    Mono
+    .NET(Core)/.NET
+    
+    (https://github.com/dotnet/core/blob/main/Documentation/core-repos.md)
+    
+.Net class libraries
+    componentize functionality into module(.Net Assembly file format)
+        Platform-specific(specific platform, all APIs)
+        Portable(multiple platform, a subset of APIs)
+        .Net Standard
+    
+Release and support for .Net
+    major release, minor release, servicing update(patches)
+    version number: major.minor.patch
+
+.Net glossary
+    JIT
+        Just-in-time compiler
+        Similar to AOT, this compiler translates IL to machine code that the processer
+            can understands.
+        Unlike AOT, JIT compilation happens on demand and is preformed on the same machine that
+            the code needs to run on.
+        Since JIT compilation occurs during execution of the application, the compile time is part
+            of the run time.
+        Thus, JIT compilers have to balance time spent optimizing code against the savings that the 
+            resulting code can produce.
+        But a JIT knows the actual machine and can free developers from having to ship different implementations.
+    AOT
+        Ahead-of-time compiler
+        Similar to JIT, this compiler also translates IL to machine code. 
+        In contrast to JIT compilation, AOT compilation happens before the application is executed and
+            is usually performed on different machine.
+        Because AOT tool chains don't compile at the runtime, they don't have to minimize time spent compiling.
+            That means they can spend more time optimizing.
+        Since the context of AOT is the entire application, the AOT compiler also performs cross-module
+            linking and whole-program analysis, which means that all references are followed and 
+            a single executable is produced.  
+
+    .Net Native
+        A compiler tool chain that produces native code ahead-of-time(AOT), as 
+            opposed to just-in-time(JIT)
+        Compilation happens on developer's machine similar to the way a C++ compiler and linker
+            works.
+        It removes unused code and spends more time to optimizing it.
+        It extracts code from libraries and merges them into executable. The result is a single
+            module that represents the entire app.
+            
+    IL
+        Intermediate language
+        Higher-level .Net languages, such as C#, compile down to a hardware-agnostic instruction set,
+            which is called intermediate languge(IL).
+        IL is sometimes referred to as MSIL(Microsoft IL) or CIL(Common IL).
+    
+    CLR
+        Common Language Runtime.
+        The exact meaning depends on context. Common Language Runtime usually refers to the runtime
+            of .Net FrameWork or the runtime of .Net 5(and .NET Core) and later versions. 
+        A CLR handle memory allocation and management.
+        A CLR is also a virtual mechine that not only executes apps but also generates and compiles
+            code on-the-fly using a JIT compiler.
+        The CLR implementation for .Net FrameWork is Windows only.
+        The CLR implementation for .Net 5(aka the Core CLR) and later version is built from
+            the same code base as the .Net FrameWork CLR.
+        Originly, the Core CLR was the runtime of Silverlight and was designed to run
+            on multiple platforms, specially Windows and OS X. It's still a cross-platform runtime,
+            now including support for many Linux distrubutions.
+    
+    CoreRT
+        In contract to the CLR, CoreRT is not a virtual machine, which means it doesn't 
+            include facilities to generate and compile code on-the-fly because it doesn't
+            include a JIT.
+        It does, however, include the GC and the ability for run-time type 
+            identification(RTTI) and reflection. 
+        However, its type system is designed so that metadata for reflection isn't required.
+            Not requiring metadata enables having an AOT tool chain that can link away 
+            superfluous metadata and (more importantly) identify code that the app does't use.
+        CoreRT is in development.
+    
+    runtime
+        In general, the execution environment for a managed program.
+        The OS is part of runtime environment but is not part of the .Net runtime.
+        Here are some examples of .Net runtimes in this sense of the word:
+            Common Language Runtime(CLR)
+            .NET Native(for UMP)
+            Mono runtime
+    
+    implementation of .Net
+        An implementation of .Net includes:
+            One or more runtime. Examples: CLR, CoreRT
+            A class library that implements a version of .Net Standard and may include 
+                additional APIs.
+            Optionally, one or more application frameworks. Examples: ASP.NET, Windows Forms
+                and WPF are included in .NET Framework and .NET 5+.
+            Optionally, development tools.
+    
+    .NET SDK
+        A set of libraries and tools allow developers to create .Net applications
+            and libraries for .NET 5(and .NET Core) and later version.
+        Aka .NET Core SDK.
+        Includes .NET CLI for building apps, .Net libraries and runtime for building
+            and run apps, and the dotnet executable(dotnet.exe) that runs CLI commands and 
+            runs applications. 
+        
+    assembly
+        A .dll or .exe file that can contain a collection of APIs that can be called by
+            applications or other assemblies.
+        An assembly may include types such as interfaces, classes, structures, enumerations and
+            delegates.
+    
+    library
+        A collection of APIs that can be called by apps and other libraries.
+        A .Net library is composed of one or more assemblies.
+        The word library and framework are often used synonymously.
+    
+    BCL
+        Base Class Library.
+        A set of libraries that comparise the System.*(and to a limited extent Microsoft.*) namespace.
+        The BCL is a general purpose, lower-level framework that higher-level application frameworks,
+            such as ASP.NET Core, build on.
+        The source code of BCL for .NET 5(and .NET Core) and later versions is contained in the 
+            .NET runtime respository. Most of these APIs are also avaliable in .NET Framework,
+            So you can think of this source code as a fork of the .NET Framework BCL source code.

@@ -1,0 +1,36 @@
+Formatting 
+    Formatting is the process of converting a instance of a class or structure, or an 
+        enumeration value to string representation.
+    The purpose is to display resulting string to users or to deserialize it later to
+        restore original data type.
+    Parsing is the inverse of formatting.
+
+The basic mechanism for formatting is the default implementation of Object.ToString method.
+    format specifier(ToString, composite format, string interpolation)
+    IFormattable
+    ICustomFormatter,IFormatProvider
+
+Format specifier
+    [format specifier][precision specifier]
+Standard numeric format string
+    B or b      Binary
+    C or c      Currency
+    D or d      Demical
+    E or e      Exponential (scientific)
+    F or f      fixed-point
+    G or g      General
+    N or n      Number
+    P or p      Percent
+    R or r      Round-trip
+    X or x      Hexadecimal
+Custom numeric format string
+    0
+    #
+    .
+    ,
+    %
+    e
+
+Date and time
+TimeSpan 
+Enumeration

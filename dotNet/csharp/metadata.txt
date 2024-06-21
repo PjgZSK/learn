@@ -1,0 +1,30 @@
+Common language runtime(CLR)
+    A CLR handles memory allocation and management.
+    A CLR is also a virtual machine that not only executes apps but also 
+        generates and compiles code on-the-fly using a JIT compiler.
+
+MSIL(Microsoft intermedia language) instructions
+    with metadata tokens
+
+Metadata
+    tables
+        holds information about the element of your program(classes, methods, fields and so on)
+        row collections
+        reference heap data
+    heaps(string, blob, user string, GUID)
+        similar to heap memory, storage actual information and can be referenced. 
+Metadata tokens
+    4 bytes number. The first byte denotes a metadata table, and the remaining 
+        three bytes specify the row in the metadata table.
+    
+PE(portable executable) file
+    PE header
+        index
+        entry point
+    MSIL instructions 
+    Metadata
+
+Run-Time use of Metadata
+    A CLR converts MSIL into native machine instructions using JIT compiler at a time
+        as need. If a metadata tokens is encountered, then retrieve address and process
+        new address.

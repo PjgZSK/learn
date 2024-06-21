@@ -47,29 +47,26 @@ Regex
     $   match the end of the string 
 
 
-football
-    dive
-    penalty
+Unity Audio
+    type: background music or sound effect
+    Audio Source
+    Audio Listener
 
-todo
-    navbar 
-        view
-            event
-                enter view
-                leave view
-        container
-            structure
-                element
-                
+Unity Coordination System 
+    Object Coordination
+    World Coordination
+    View Coordination
+    Projection Coordination
+    Device Coordination
 
+Unity Time
+    variable time step: deltaTime, time, timeScale, maximumDeltaTime
+    fixed time step: fixedDeltaTime, fixedTime
 
-undetermined
-    next match ui effect
-
-
-
-
-
+Unity RectTransform
+    anchor -> local Coordination
+    pivot -> rect origin point
+    sizeDelta -> rect size
 
 
  

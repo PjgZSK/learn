@@ -1,0 +1,3 @@
+The is and as keywords is applied for expression that return a value.
+The typeof keyword is applied for type.
+The Object.GetType() is applied for expression that return a value.
