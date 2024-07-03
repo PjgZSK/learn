@@ -1,0 +1,10 @@
+1. component-wise operations
+2. Equation
+    vector addition
+    vector negation
+    vector multiplication(no geometric representation)
+    vector-scalar multiplication
+    vector-scalar addition(no geometric representation)
+    vector algebra(commutative, associative, distributive)
+    vector length
+    vector normalization
