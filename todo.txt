@@ -7,32 +7,6 @@ system error
     SIGSEGV
         illegal memory read/write
 
-
-canvas group
-    how to integrate with editor
-        CustomEditor(typeof(CanvasGroup))
-        editor extend, inherited from Editor
-        OnInspectorGUI
-            Editor.target
-            EditorGUILayout.Space()
-            EditorGUILayout.LabelField("")
-            EditorGUILayout.Button("")
-    how to generate code
-        Directory.Exists("")
-            Directory.CreateDirectory("")
-        var writer = new StreamWriter("path/to/script")
-            var writtenStr = AssetDatabase.LoadAssetAtPath<TextAsset>("path/to/ScriptTemplate.cs").text
-            writer.Write(writtenStr)
-            writer.Close()
-        AssetDatabase.Refresh()
-    how to generate prefab
-        Directory.Exists("path")
-            Directory.CreateDirectory("path")
-        var obj = (Editor.target as CanvasGroup).GameObject
-        PrefabUtility.IsAnyPrefabInstanceRoot(obj)
-            PrefabUtility.UnpackPrefabInstance(obj, PrefabUnpackMode.OutermostRoot, InteractionMode.AutomatedAction)
-        PrefabUtility.SaveAsPrefabAssetAndConnect(obj, "path", InteractionMode.AutomatedAction) 
-
 line ending
     dos/windows: "\r\n"
     unix/mac osx: "\n"
@@ -46,27 +20,3 @@ Regex
     ^   match the start of the string
     $   match the end of the string 
 
-
-Unity Audio
-    type: background music or sound effect
-    Audio Source
-    Audio Listener
-
-Unity Coordination System 
-    Object Coordination
-    World Coordination
-    View Coordination
-    Projection Coordination
-    Device Coordination
-
-Unity Time
-    variable time step: deltaTime, time, timeScale, maximumDeltaTime
-    fixed time step: fixedDeltaTime, fixedTime
-
-Unity RectTransform
-    anchor -> local Coordination
-    pivot -> rect origin point
-    sizeDelta -> rect size
-
-
- 
