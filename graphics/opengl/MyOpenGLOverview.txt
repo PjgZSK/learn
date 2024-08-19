@@ -1,2 +1,0 @@
-OpenGL: rasterization-based rendering system
-To use OpenGL: windows management tools, OpenGL function load tools

@@ -1,3 +1,0 @@
-1. transform matrix
-    local/model <-> world
-    world <-> camera

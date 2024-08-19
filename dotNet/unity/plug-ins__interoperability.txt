@@ -1,7 +1,0 @@
-The plug-in in Unity is the interoperability in .Net.
-
-There are two kind of plug-ins in Unity:
-    Managed plug-ins(managed code)
-    Native plug-ins(unmanaged code)
-
-DllImportAttribute
